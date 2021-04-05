@@ -19,7 +19,10 @@
       <el-badge class="item" type="danger" value="3" @click="onMessage()"
         ><i class="el-icon-message"></i
       ></el-badge>
-      <img class="thumb" src="@/assets/images/logo.png" alt="thumb" />
+      <el-avatar
+        class="thumb"
+        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+      ></el-avatar>
       <el-dropdown>
         <span class="username"
           >王小虎<i
@@ -102,14 +105,10 @@ export default {
   float: right;
 
   .thumb {
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgb(187, 187, 187);
-    border-radius: 50%;
+    border: 1px solid #bbbbbb;
     vertical-align: middle;
     margin-left: 28px;
     margin-right: 12px;
-    box-sizing: border-box;
   }
 
   .username {

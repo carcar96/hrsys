@@ -6,6 +6,7 @@
           :inline="true"
           :model="searchForm"
           :rules="searchRule"
+          :hide-required-asterisk="true"
           ref="searchForm"
         >
           <el-form-item label="展示时间" prop="showTime">
@@ -29,7 +30,7 @@
               end-placeholder="结束日期"
             ></el-date-picker>
           </el-form-item>
-          <el-form-item label="企业名称" prop="key">
+          <el-form-item label="企业名称" prop="company">
             <el-input
               size="medium"
               placeholder="输入企业名称"
@@ -120,10 +121,7 @@
               </el-table-column>
               <el-table-column label="操作" width="140" align="center">
                 <template #default="scope">
-                  <el-button
-                    @click="handleClick(scope.row)"
-                    type="text"
-                    size="small"
+                  <el-button @click="handleClick(scope.row)" type="text"
                     >查看企业详情</el-button
                   >
                 </template>
