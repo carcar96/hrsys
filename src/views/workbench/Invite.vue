@@ -41,6 +41,7 @@
                   placeholder="请选择"
                   style="width: 100px"
                 >
+                  <el-option label="全部" value="0"> </el-option>
                   <el-option
                     v-for="item in sexOptions"
                     :key="item.value"
@@ -56,6 +57,7 @@
                   placeholder="请选择"
                   style="width: 120px"
                 >
+                  <el-option label="全部" value="0"> </el-option>
                   <el-option
                     v-for="item in wxOptions"
                     :key="item.value"
@@ -68,7 +70,7 @@
               <el-form-item label="面试企业" prop="company">
                 <el-input
                   size="medium"
-                  placeholder="请输入面试企业"
+                  placeholder="请输入企业名称"
                   v-model="searchForm.company"
                   style="width: 150px"
                 ></el-input>
@@ -81,6 +83,7 @@
                   placeholder="请选择对接盟友"
                   style="width: 150px"
                 >
+                  <el-option label="全部" value="0"> </el-option>
                   <el-option
                     v-for="item in sexOptions"
                     :key="item.value"
@@ -96,6 +99,7 @@
                   placeholder="请选择对接渠道"
                   style="width: 150px"
                 >
+                  <el-option label="全部" value="0"> </el-option>
                   <el-option
                     v-for="item in sexOptions"
                     :key="item.value"
@@ -123,10 +127,14 @@
                   placeholder="请选择用工模式"
                   style="width: 110px"
                 >
-                  <el-option label="全部" value="0"></el-option>
-                  <el-option label="代招" value="1"></el-option>
-                  <el-option label="派遣" value="2"></el-option>
-                  <el-option label="小时工" value="3"></el-option>
+                  <el-option label="全部" value="0"> </el-option>
+                  <el-option
+                    v-for="item in workmodeOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="入职状态" prop="status">
@@ -135,8 +143,9 @@
                   placeholder="请选择入职状态"
                   style="width: 130px"
                 >
+                  <el-option label="全部" value="0"> </el-option>
                   <el-option
-                    v-for="item in statusOptions"
+                    v-for="item in entryOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -210,16 +219,14 @@
               >
               </el-table-column>
               <el-table-column
-                prop="age"
+                prop="sex"
                 label="性别"
                 width="75"
                 sortable
                 align="center"
               >
                 <template #default="scope">
-                  <span v-if="scope.row.sex == 1">男</span>
-                  <span v-else-if="scope.row.sex == 2">女</span>
-                  <span v-else>未知</span>
+                  {{ computeSex(scope.row.sex) }}
                 </template>
               </el-table-column>
               <el-table-column
@@ -281,37 +288,17 @@
                 align="center"
               >
                 <template #default="scope">
-                  <span v-if="scope.row.mode == 1">代工</span>
-                  <span v-else-if="scope.row.mode == 2">派遣</span>
-                  <span v-else-if="scope.row.mode == 3">小时工</span>
+                  {{ computeMode(scope.row.mode) }}
                 </template>
               </el-table-column>
               <el-table-column
-                label="入职动态"
+                label="入职状态"
                 width="101"
                 sortable
                 align="center"
               >
                 <template #default="scope">
-                  <span v-if="scope.row.status == 1">未到厂</span>
-                  <span v-else-if="scope.row.status == 2" style="color: #409eff"
-                    >未面试</span
-                  >
-                  <span v-else-if="scope.row.status == 3" style="color: #f56c6c"
-                    >面试不通过</span
-                  >
-                  <span v-else-if="scope.row.status == 4" style="color: #67c23a"
-                    >面试通过</span
-                  >
-                  <span v-else-if="scope.row.status == 5" style="color: #e6a23c"
-                    >待入职</span
-                  >
-                  <span v-else-if="scope.row.status == 6" style="color: #303133"
-                    >已入职</span
-                  >
-                  <span v-else-if="scope.row.status == 7" style="color: #909399"
-                    >未入职</span
-                  >
+                  <div v-html="computeStatus(scope.row.status)"></div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -341,7 +328,7 @@
                   <span>{{ scope.row.note || "-" }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="180" align="center">
+              <el-table-column label="操作" width="190" align="center">
                 <template #default="scope">
                   <el-space spacer="/">
                     <el-button
@@ -392,17 +379,13 @@
       </el-main>
     </el-container>
     <!-- 跟进动态 -->
-    <Follow
-      :isShow="showFollow"
-      :info="followUser"
-      @closeFollow="closeFollow"
-    />
+    <Follow :isShow="showFollow" :info="followUser" @close="closeFollow" />
     <!-- 编辑 -->
     <el-dialog
       title="确认邀约"
       v-model="editDialogVisible"
       width="600px"
-      @closed="closeInvite('editForm')"
+      @closed="closeEdit('editForm')"
     >
       <el-form
         :model="editForm"
@@ -420,8 +403,13 @@
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-select v-model="editForm.sex" placeholder="请选择性别">
-            <el-option label="男" value="1"></el-option>
-            <el-option label="女" value="2"></el-option>
+            <el-option
+              v-for="item in sexOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="年龄" prop="age">
@@ -488,9 +476,13 @@
         </el-form-item>
         <el-form-item label="用工模式" prop="mode">
           <el-select v-model="editForm.mode" placeholder="请选择用工模式">
-            <el-option label="代招" value="1"></el-option>
-            <el-option label="派遣" value="2"></el-option>
-            <el-option label="小时工" value="3"></el-option>
+            <el-option
+              v-for="item in workmodeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="最新沟通">
@@ -543,6 +535,12 @@
 </template>
 
 <script>
+import {
+  sexOptions,
+  wxOptions,
+  workmodeOptions,
+  entryOptions,
+} from "@/assets/js/dropdown.js";
 import Follow from "@/components/Follow.vue";
 export default {
   components: {
@@ -766,68 +764,10 @@ export default {
           })(),
         },
       ],
-      sexOptions: [
-        {
-          value: "0",
-          label: "全部",
-        },
-        {
-          value: "1",
-          label: "男",
-        },
-        {
-          value: "2",
-          label: "女",
-        },
-      ],
-      wxOptions: [
-        {
-          value: "0",
-          label: "全部",
-        },
-        {
-          value: "1",
-          label: "有微信号",
-        },
-        {
-          value: "2",
-          label: "无微信号",
-        },
-      ],
-      statusOptions: [
-        {
-          value: "0",
-          label: "全部",
-        },
-        {
-          value: "1",
-          label: "未到厂",
-        },
-        {
-          value: "2",
-          label: "未面试",
-        },
-        {
-          value: "3",
-          label: "面试不通过",
-        },
-        {
-          value: "4",
-          label: "面试通过",
-        },
-        {
-          value: "5",
-          label: "待入职",
-        },
-        {
-          value: "5",
-          label: "已入职",
-        },
-        {
-          value: "5",
-          label: "未入职",
-        },
-      ],
+      sexOptions: sexOptions,
+      wxOptions: wxOptions,
+      workmodeOptions: workmodeOptions,
+      entryOptions: entryOptions,
       hList: [
         {
           num: 89,
@@ -908,6 +848,40 @@ export default {
     };
   },
   methods: {
+    computeSex(sex) {
+      let sexItem = this.sexOptions.find((item) => item.value == sex);
+      return sexItem.label;
+    },
+    computeMode(mode) {
+      let modeItem = this.workmodeOptions.find((item) => item.value == mode);
+      return modeItem.label;
+    },
+    computeStatus(status) {
+      let fontColor = "";
+      switch (status) {
+        case "2":
+          fontColor = "#409eff";
+          break;
+        case "3":
+          fontColor = "#f56c6c";
+          break;
+        case "4":
+          fontColor = "#67c23a";
+          break;
+        case "5":
+          fontColor = "#e6a23c";
+          break;
+        case "6":
+          fontColor = "#303133";
+        case "7":
+          fontColor = "#909399";
+          break;
+        default:
+          break;
+      }
+      let entryItem = this.entryOptions.find((item) => item.value == status);
+      return `<span style="color:${fontColor}">${entryItem.label}</span>`;
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid, obj) => {
         if (valid) {

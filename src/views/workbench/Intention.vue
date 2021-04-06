@@ -44,6 +44,7 @@
                   placeholder="请选择"
                   style="width: 100px"
                 >
+                  <el-option label="全部" value="0"> </el-option>
                   <el-option
                     v-for="item in sexOptions"
                     :key="item.value"
@@ -59,6 +60,7 @@
                   placeholder="请选择"
                   style="width: 120px"
                 >
+                  <el-option label="全部" value="0"> </el-option>
                   <el-option
                     v-for="item in wxOptions"
                     :key="item.value"
@@ -134,16 +136,14 @@
               >
               </el-table-column>
               <el-table-column
-                prop="age"
+                prop="sex"
                 label="性别"
                 width="80"
                 sortable
                 align="center"
               >
                 <template #default="scope">
-                  <span v-if="scope.row.sex == 1">男</span>
-                  <span v-else-if="scope.row.sex == 2">女</span>
-                  <span v-else>未知</span>
+                  {{ computeSex(scope.row.sex) }}
                 </template>
               </el-table-column>
               <el-table-column
@@ -241,7 +241,7 @@
     <Follow
       :isShow="showFollow"
       :info="followUser"
-      @closeFollow="closeFollow"
+      @close="closeFollow"
     />
     <!-- 编辑用户信息 -->
     <el-dialog
@@ -266,8 +266,13 @@
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-select v-model="editForm.sex" placeholder="请选择性别">
-            <el-option label="男" value="1"></el-option>
-            <el-option label="女" value="2"></el-option>
+            <el-option
+              v-for="item in sexOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="年龄" prop="age">
@@ -351,8 +356,13 @@
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-select v-model="inviteForm.sex" placeholder="请选择性别">
-            <el-option label="男" value="1"></el-option>
-            <el-option label="女" value="2"></el-option>
+            <el-option
+              v-for="item in sexOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="年龄" prop="age">
@@ -425,9 +435,13 @@
         </el-form-item>
         <el-form-item label="用工模式" prop="mode">
           <el-select v-model="inviteForm.mode" placeholder="请选择用工模式">
-            <el-option label="代招" value="1"></el-option>
-            <el-option label="派遣" value="2"></el-option>
-            <el-option label="小时工" value="3"></el-option>
+            <el-option
+              v-for="item in workmodeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
         <el-divider></el-divider>
@@ -459,6 +473,11 @@
 </template>
 
 <script>
+import {
+  sexOptions,
+  wxOptions,
+  workmodeOptions,
+} from "@/assets/js/dropdown.js";
 import Follow from "@/components/Follow.vue";
 export default {
   components: {
@@ -547,34 +566,9 @@ export default {
           })(),
         },
       ],
-      sexOptions: [
-        {
-          value: "0",
-          label: "全部",
-        },
-        {
-          value: "1",
-          label: "男",
-        },
-        {
-          value: "2",
-          label: "女",
-        },
-      ],
-      wxOptions: [
-        {
-          value: "0",
-          label: "全部",
-        },
-        {
-          value: "1",
-          label: "有微信号",
-        },
-        {
-          value: "2",
-          label: "无微信号",
-        },
-      ],
+      sexOptions: sexOptions,
+      wxOptions: wxOptions,
+      workmodeOptions: workmodeOptions,
       hList: [
         {
           num: 89,
@@ -693,6 +687,10 @@ export default {
     };
   },
   methods: {
+    computeSex(sex) {
+      let sexItem = this.sexOptions.find((item) => item.value == sex);
+      return sexItem.label;
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid, obj) => {
         if (valid) {

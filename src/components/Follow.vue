@@ -82,7 +82,7 @@ export default {
       console.log(data);
     },
     close() {
-      this.$emit("closeFollow", false);
+      this.$emit("close", false);
     },
   },
 };
