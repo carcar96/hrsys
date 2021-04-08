@@ -12,7 +12,7 @@
           <el-form-item label="展示时间" prop="showTime">
             <el-date-picker
               type="date"
-              placeholder="选择日期"
+              placeholder="请选择日期"
               v-model="searchForm.showTime"
               :clearable="false"
               size="medium"
@@ -33,7 +33,7 @@
           <el-form-item label="企业名称" prop="company">
             <el-input
               size="medium"
-              placeholder="输入企业名称"
+              placeholder="请输入企业名称"
               v-model="searchForm.company"
             ></el-input>
           </el-form-item>

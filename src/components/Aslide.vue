@@ -127,14 +127,14 @@ export default {
             },
             {
               title: "经验分享",
-              path: "exshare",
+              path: "rpshare",
             },
           ],
         },
         {
           title: "企业简章",
           icon: "el-icon-office-building",
-          path: "cobrochure",
+          path: "colist",
         },
         {
           title: "企业文化",
@@ -144,7 +144,6 @@ export default {
         {
           title: "数据分析",
           icon: "el-icon-data-analysis",
-          path: "",
           children: [
             {
               title: "公司数据分析",
@@ -274,7 +273,7 @@ export default {
           });
         }
       });
-
+      console.log(bcList);
       this.$store.dispatch("setStateByKey", { key: "bcList", value: bcList });
       this.updateSelectKey();
     },

@@ -74,15 +74,21 @@ const routes = [,
         meta: { requiresAuth: true }
       },
       {
-        name: 'ExShare',
-        path: 'exshare',
+        name: 'RpShare',
+        path: 'rpshare',
         component: () => import('../views/workreport/Share.vue'),
         meta: { requiresAuth: true }
       },
       {
-        name: 'CoBrochure',
-        path: 'cobrochure',
-        component: () => import('../views/cobrochure/Index.vue'),
+        name: 'CoList',
+        path: 'colist',
+        component: () => import('../views/cobrochure/List.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        name: 'CoDetail',
+        path: 'codetail',
+        component: () => import('../views/cobrochure/Detail.vue'),
         meta: { requiresAuth: true }
       },
       {

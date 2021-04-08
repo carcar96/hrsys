@@ -221,18 +221,19 @@
     </el-container>
     <!-- 跟进动态 -->
     <Follow :isShow="showFollow" :info="followUser" @close="closeFollow" />
-    <!-- 添加求职者 -->
-    <AddApplicant
+    <Applicant
       :isShow="showAddDialog"
       fromType="2"
+      submitType="1"
       @submit="addApplicant"
       @closed="closedAdd"
     />
     <!-- 编辑用户信息 -->
-    <EditApplicant
+    <Applicant
       :isShow="showEditDialog"
       fromType="2"
-      :editData="editForm"
+      submitType="2"
+      :formData="editForm"
       @submit="editApplicant"
       @closed="closedEdit"
     />
@@ -247,13 +248,11 @@ import {
   educateOptions,
 } from "@/assets/js/dropdown.js";
 import Follow from "@/components/Follow.vue";
-import AddApplicant from "@/components/AddApplicant.vue";
-import EditApplicant from "@/components/EditApplicant.vue";
+import Applicant from "@/components/ApplicantDialog.vue";
 export default {
   components: {
     Follow,
-    AddApplicant,
-    EditApplicant,
+    Applicant,
   },
   data() {
     const item = {
@@ -269,20 +268,7 @@ export default {
       education: "本科",
       partner: "",
     };
-    const validateDockAlly = (rule, value, callback) => {
-      if (this.inviteForm.partnership == 1 && !value) {
-        callback(new Error("请选择对接盟友"));
-      } else {
-        callback();
-      }
-    };
-    const validateDockChannel = (rule, value, callback) => {
-      if (this.inviteForm.partnership == 2 && !value) {
-        callback(new Error("请选择对接渠道"));
-      } else {
-        callback();
-      }
-    };
+
     return {
       tableData: Array(20).fill(item),
       searchForm: {
