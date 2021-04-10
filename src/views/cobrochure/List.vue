@@ -299,7 +299,7 @@ export default {
     handleDetail(row) {
       let bcList = this.$store.state.bcList;
       bcList[1] = row.company;
-      this.$store.dispatch("setStateByKey", { key: "bcList", value: bcList });
+      this.$store.commit("updateStateByKey", { key: "bcList", value: bcList });
       this.$router.push({ name: "CoDetail" }); // 跳转
     },
     addCo(formName) {

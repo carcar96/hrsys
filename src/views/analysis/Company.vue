@@ -461,6 +461,7 @@ export default {
         });
 
         this.chartBar = getchart;
+        this.$utils.addStoreEchart(getchart);
       } else {
         var option = this.chartBar.getOption();
         // 先清空
@@ -527,6 +528,7 @@ export default {
         });
 
         this.chartLine = getchart;
+        this.$utils.addStoreEchart(getchart);
       } else {
         var option = this.chartLine.getOption();
         // 先清空

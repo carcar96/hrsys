@@ -1,5 +1,5 @@
 <template>
-  <div id="attrcheck" class="attrcheck">
+  <div id="channelfb" class="channelfb">
     <el-form
       :inline="true"
       :model="searchForm"
@@ -20,25 +20,18 @@
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="收入项目" prop="income_project">
+      <el-form-item label="公司名称" prop="company">
         <el-input
           size="medium"
-          placeholder="请输入项目名称"
-          v-model="searchForm.income_project"
+          placeholder="请输入公司名称"
+          v-model="searchForm.company"
         ></el-input>
       </el-form-item>
-      <el-form-item label="人员归属" prop="ownership">
+      <el-form-item label="渠道名称" prop="channel">
         <el-input
           size="medium"
-          placeholder="请输入姓名"
-          v-model="searchForm.ownership"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="盟友名称" prop="ally">
-        <el-input
-          size="medium"
-          placeholder="请输入盟友名称"
-          v-model="searchForm.ally"
+          placeholder="请输入渠道名称"
+          v-model="searchForm.channel"
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -51,92 +44,35 @@
       </el-form-item>
     </el-form>
     <el-table
-      :data="tableData"
+      size="medium"
       border
       show-summary
-      size="medium"
+      :data="channelList"
+      :summary-method="channelSummaries"
       :header-cell-style="{ backgroundColor: '#F7F7F7' }"
       :cell-style="setCellColor"
-      :summary-method="getSummaries"
+      :default-sort="{ prop: 'percent', order: 'descending' }"
       @sort-change="sortChange"
-      style="width: 1245px"
     >
-      <el-table-column label="序号" type="index" width="54" align="center">
+      <el-table-column prop="source" label="渠道名称/企业名称" align="center">
       </el-table-column>
       <el-table-column
         prop="company"
-        label="在职企业"
-        width="200"
+        :column-key="item.id"
+        :label="item.label"
         sortable
         align="center"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        width="120"
-        label="姓名"
-        sortable
-        align="center"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="contact"
-        width="120"
-        label="联系方式"
-        sortable
-        align="center"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="entry_date"
-        width="120"
-        label="入职日期"
-        sortable
-        align="center"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="leave_date"
-        width="120"
-        label="离职日期"
-        sortable
-        align="center"
+        v-for="(item, i) in companyList"
+        :key="i"
       >
         <template #default="scope">
-          <span>{{ scope.row.leave_date || "-" }}</span>
+          <span>{{ scope.row.company[item.id].total || "-" }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="ally"
-        width="150"
-        label="对接盟友"
-        sortable
-        align="center"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="refund"
-        width="120"
-        label="返费金额"
-        sortable
-        align="center"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="amount"
-        width="120"
-        label="支出金额"
-        sortable
-        align="center"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="difference"
-        width="120"
-        label="差额利润"
-        sortable
-        align="center"
-      >
+      <el-table-column prop="ctotal" label="合计" sortable align="center">
+        <template #default="scope">
+          <span>{{ computedCompany(scope.row.company) }}</span>
+        </template>
       </el-table-column>
     </el-table>
     <el-row :gutter="20">
@@ -144,40 +80,20 @@
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
-              <span>营收企业占比</span>
+              <span>企业占比</span>
             </div>
           </template>
-          <div class="echart" id="echart-pie-income"></div>
+          <div class="echart" id="echart-pie-compay"></div>
         </el-card>
       </el-col>
       <el-col :sm="24" :lg="12">
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
-              <span>人员归属占比</span>
+              <span>渠道占比</span>
             </div>
           </template>
-          <div class="echart" id="echart-pie-ownership"></div>
-        </el-card>
-      </el-col>
-      <el-col :sm="24" :lg="12">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>对接盟友占比</span>
-            </div>
-          </template>
-          <div class="echart" id="echart-pie-ally"></div>
-        </el-card>
-      </el-col>
-      <el-col :sm="24" :lg="12">
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span>利润差额占比</span>
-            </div>
-          </template>
-          <div class="echart" id="echart-pie-difference"></div>
+          <div class="echart" id="echart-pie-channel"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -193,9 +109,8 @@ export default {
           new Date(new Date().getTime() - 3600 * 1000 * 24 * 7),
           new Date(),
         ],
-        income_project: "",
-        ownership: "",
-        ally: "",
+        company: "",
+        channel: "",
       },
       searchRule: {
         date: [
@@ -240,90 +155,117 @@ export default {
           })(),
         },
       ],
-      tableData: [
+      companyList: [
         {
+          label: "友德",
           id: "1",
-          company: "凡谷综合",
-          name: "徐冲",
-          contact: "18022429894",
-          entry_date: "2020/8/5",
-          leave_date: "",
-          ownership: "刘章豪",
-          ally: "中京",
-          refund: "13077",
-          amount: "500",
-          difference: "800",
         },
         {
+          label: "华工",
           id: "2",
-          company: "凡谷综合",
-          name: "徐冲",
-          contact: "18022429894",
-          entry_date: "2020/8/5",
-          leave_date: "",
-          ownership: "刘章豪",
-          ally: "中京",
-          refund: "13077",
-          amount: "500",
-          difference: "800",
         },
         {
+          label: "联想",
           id: "3",
-          company: "凡谷综合",
-          name: "徐冲",
-          contact: "18022429894",
-          entry_date: "2020/8/5",
-          leave_date: "2020/12/15",
-          ownership: "刘章豪",
-          ally: "中京",
-          refund: "13077",
-          amount: "500",
-          difference: "800",
+        },
+        {
+          label: "天马",
+          id: "4",
+        },
+        {
+          label: "凡谷",
+          id: "5",
+        },
+        {
+          label: "东方骏驰",
+          id: "6",
+        },
+        {
+          label: "富晶",
+          id: "7",
+        },
+        {
+          label: "德威斯",
+          id: "8",
+        },
+      ],
+      channelList: [
+        {
+          source: "张三",
+          company: {
+            1: { total: 0 },
+            2: { total: 1212.15 },
+            3: { total: 1312 },
+            4: { total: 0 },
+            5: { total: 1512.52 },
+            6: { total: 1512 },
+            7: { total: 2512 },
+            8: { total: 512.89 },
+          },
+        },
+        {
+          source: "宏德",
+          company: {
+            1: { total: 2112 },
+            2: { total: 0 },
+            3: { total: 2132 },
+            4: { total: 2142.25 },
+            5: { total: 252 },
+            6: { total: 0 },
+            7: { total: 2152.62 },
+            8: { total: 4152 },
+          },
+        },
+        {
+          source: "佳信",
+          company: {
+            1: { total: 3113 },
+            2: { total: 0 },
+            3: { total: 0 },
+            4: { total: 3443 },
+            5: { total: 12153.26 },
+            6: { total: 3153.44 },
+            7: { total: 4153 },
+            8: { total: 38453 },
+          },
+        },
+        {
+          source: "李四",
+          company: {
+            1: { total: 5214 },
+            2: { total: 2224 },
+            3: { total: 1234 },
+            4: { total: 244.22 },
+            5: { total: 56254 },
+            6: { total: 32254 },
+            7: { total: 52254 },
+            8: { total: 3254.99 },
+          },
         },
       ],
       chartPie: {},
-      incomeData: [
+      companyData: [
         { value: 45, name: "华星光电" },
         { value: 30, name: "京东方" },
         { value: 25, name: "富士康" },
       ],
-      ownershipData: [
-        { value: 25, name: "张伟" },
-        { value: 47, name: "李凯" },
-        { value: 28, name: "李四" },
-      ],
-      allyData: [
+      channelData: [
         { value: 35, name: "大众行" },
         { value: 40, name: "纵邦" },
         { value: 25, name: "汇睿" },
       ],
-      differenceData: [
-        { value: 1048, name: "大众" },
-        { value: 835, name: "百得" },
-        { value: 680, name: "中法" },
-      ],
     };
   },
   mounted() {
-    this.initChartPie("echart-pie-income", {
-      name: "营收企业",
-      data: this.incomeData,
+    this.initChartPie("echart-pie-compay", {
+      name: "企业",
+      data: this.companyData,
       labelUnit: "%",
     });
-    this.initChartPie("echart-pie-ownership", {
-      name: "人员归属",
-      data: this.ownershipData,
+    this.initChartPie("echart-pie-channel", {
+      name: "渠道",
+      data: this.channelData,
       labelUnit: "%",
-    });
-    this.initChartPie("echart-pie-ally", {
-      name: "对接盟友",
-      data: this.allyData,
-      labelUnit: "%",
-    });
-    this.initChartPie("echart-pie-difference", {
-      name: "利润差额",
-      data: this.differenceData,
-      labelUnit: "元",
     });
   },
   methods: {
@@ -351,6 +293,62 @@ export default {
     },
     sortChange(data) {
       console.log(data);
+    },
+    computedCompany(company) {
+      let values = [];
+      for (let key in company) {
+        values.push(Number(company[key].total));
+      }
+
+      let total = 0;
+      if (!values.every((value) => isNaN(value))) {
+        total = values.reduce((prev, curr) => {
+          const value = Number(curr);
+          if (!isNaN(value)) {
+            return prev + curr;
+          } else {
+            return prev;
+          }
+        }, 0);
+      } else {
+        total = "N/A";
+      }
+
+      return total.toFixed(2);
+    },
+    channelSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = "总计";
+          return;
+        }
+
+        let values = [];
+        if (column.property == "company") {
+          values = data.map((item) =>
+            Number(item[column.property][column.columnKey].total)
+          );
+        } else if (column.property == "ctotal") {
+          values = data.map((item) => this.computedCompany(item.company));
+        }
+        if (!values.every((value) => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + value;
+            } else {
+              return prev;
+            }
+          }, 0);
+
+          sums[index] = sums[index].toFixed(2);
+        } else {
+          sums[index] = "N/A";
+        }
+      });
+      return sums;
     },
     initChartPie(domId, pData) {
       if (!this.chartPie[domId]) {
@@ -469,7 +467,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.attrcheck {
+.channelfb {
   padding: 0 20px;
 
   .box-card {

@@ -48,12 +48,12 @@
       <div class="echart" id="echart-ent-total"></div>
     </el-card>
     <el-row>
-      <el-col :span="12">
+      <el-col :lg="24" :xl="12">
         <el-card class="box-card reason">
           <div class="echart" id="echart-leave-reason"></div>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :lg="24" :xl="12">
         <el-card class="box-card retained">
           <div class="content">
             <h3 class="echart-title">留存排名</h3>
@@ -114,20 +114,22 @@
     <el-card class="box-card">
       <div class="tool">
         <span class="echart-title">企业留存情况</span>
-        <el-radio-group
-          v-model="datesegment"
-          size="medium"
-          style="margin-left: 30px; margin-right: 50px"
-        >
-          <el-radio-button label="0">日</el-radio-button>
-          <el-radio-button label="1">周</el-radio-button>
-          <el-radio-button label="2">月</el-radio-button>
-        </el-radio-group>
-        <el-radio-group v-model="recruittype">
-          <el-radio label="0">入职人数</el-radio>
-          <el-radio label="1">在职人数</el-radio>
-          <el-radio label="2">离职人数</el-radio>
-        </el-radio-group>
+        <div class="echart-menu">
+          <el-radio-group
+            v-model="datesegment"
+            size="small"
+            style="margin-right: 40px"
+          >
+            <el-radio-button label="0">日</el-radio-button>
+            <el-radio-button label="1">周</el-radio-button>
+            <el-radio-button label="2">月</el-radio-button>
+          </el-radio-group>
+          <el-radio-group v-model="recruittype" size="small">
+            <el-radio label="0">入职人数</el-radio>
+            <el-radio label="1">在职人数</el-radio>
+            <el-radio label="2">离职人数</el-radio>
+          </el-radio-group>
+        </div>
       </div>
       <div class="echart" id="echart-retained"></div>
     </el-card>
@@ -330,10 +332,10 @@ export default {
   },
   watch: {
     datesegment(newVal) {
-      this.updateLineData();
+      this.updateRetainedData();
     },
     recruittype(newVal) {
-      this.updateLineData();
+      this.updateRetainedData();
     },
   },
   mounted() {
@@ -343,7 +345,7 @@ export default {
       x: this.leaveReasonData.x,
       y: this.leaveReasonData.y,
     });
-    this.updateLineData();
+    this.updateRetainedData();
   },
   methods: {
     initChartReason(domId, echartData) {
@@ -384,6 +386,8 @@ export default {
       window.addEventListener("resize", () => {
         getchart.resize();
       });
+
+      this.$utils.addStoreEchart(getchart);
     },
     initChartEnt(domId, echartData) {
       let legend = echartData.legend;
@@ -433,6 +437,8 @@ export default {
       window.addEventListener("resize", () => {
         getchart.resize();
       });
+
+      this.$utils.addStoreEchart(getchart);
     },
     setCellColor({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
@@ -442,12 +448,15 @@ export default {
     sortChange(data) {
       console.log(data);
     },
-    updateLineData() {
+    updateRetainedData() {
       let dIdx = Number(this.datesegment);
       let rIdx = Number(this.recruittype);
-      this.initChartLine(this.lineData[dIdx].x, this.lineData[dIdx].y[rIdx]);
+      this.initChartRetained(
+        this.lineData[dIdx].x,
+        this.lineData[dIdx].y[rIdx]
+      );
     },
-    initChartLine(xData, yData) {
+    initChartRetained(xData, yData) {
       if (!this.chartRetained) {
         let getchart = this.$echarts.init(
           document.getElementById("echart-retained")
@@ -500,6 +509,7 @@ export default {
         });
 
         this.chartRetained = getchart;
+        this.$utils.addStoreEchart(getchart);
       } else {
         var option = this.chartRetained.getOption();
         // 先清空
@@ -520,7 +530,7 @@ export default {
 
 <style lang="scss" scoped>
 .entanls {
-  padding: 20px;
+  padding: 0 20px;
 
   .echart-title {
     color: #555;
@@ -556,6 +566,11 @@ export default {
 
   .tool {
     padding: 0 10px;
+    .echart-menu {
+      display: inline-block;
+      text-align: center;
+      margin-left: 24px;
+    }
   }
 }
 </style>

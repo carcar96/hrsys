@@ -659,6 +659,7 @@ export default {
         });
 
         this.chartLine = getchart;
+        this.$utils.addStoreEchart(getchart);
       } else {
         var option = this.chartLine.getOption();
         // 先清空
@@ -715,7 +716,7 @@ export default {
 
 <style lang="scss" scoped>
 .staff {
-  padding: 20px;
+  padding: 0 20px;
 
   .echart {
     width: 100%;

@@ -374,6 +374,7 @@ export default {
         });
 
         this.leaveNumChart = getchart;
+        this.$utils.addStoreEchart(getchart);
       } else {
         var option = this.leaveNumChart.getOption();
         // 先清空
@@ -439,6 +440,8 @@ export default {
       window.addEventListener("resize", () => {
         getchart.resize();
       });
+
+      this.$utils.addStoreEchart(getchart);
     },
   },
 };
@@ -446,7 +449,7 @@ export default {
 
 <style lang="scss" scoped>
 .applicant {
-  padding: 20px;
+  padding: 0 20px;
 
   .echart {
     width: 100%;

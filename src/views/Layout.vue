@@ -42,6 +42,9 @@ export default {
     isCollapse() {
       this.listenAslide();
     },
+    $route() {
+      this.$utils.clearStoreEchart();
+    },
   },
   methods: {
     listenAslide() {
@@ -50,7 +53,9 @@ export default {
       erd.listenTo(document.getElementById("aslideMenu"), (element) => {
         this.$nextTick(() => {
           // //使echarts尺寸重置
-          // this.myEcharts.resize();
+          this.$store.state.echartList.forEach((item) => {
+            item.resize();
+          });
           var width = element.offsetWidth;
           width = width > this.asideMaxWidth ? this.asideMaxWidth : width;
           width = width < this.asideMinWidth ? this.asideMinWidth : width;

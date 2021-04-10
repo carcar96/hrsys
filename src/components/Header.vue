@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     bcList() {
-      return this.$store.getters.getStateByKey("bcList");
+      return this.$store.state.bcList;
     },
   },
   methods: {

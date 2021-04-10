@@ -3,11 +3,12 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     bcList: [], // 面包屑
+    echartList: [], //echart实例对象
   },
   getters: {
-    getStateByKey: (state) => (key => {
-      return state[key];
-    })
+    // getStateByKey: (state) => (key => {
+    //   return state[key];
+    // })
   },
   mutations: {
     updateStateByKey(state, params) {
@@ -15,9 +16,9 @@ export default createStore({
     }
   },
   actions: {
-    setStateByKey(context, params) {
-      context.commit('updateStateByKey', params);
-    }
+    // setStateByKey(context, params) {
+    //   context.commit('updateStateByKey', params);
+    // },
   },
   modules: {
   }

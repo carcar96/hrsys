@@ -80,7 +80,7 @@ plugins.forEach(plugin => {
 app.config.globalProperties.$utils = $utils;
 app.config.globalProperties.$moment = $moment;
 app.config.globalProperties.$echarts = $echarts;
-console.log($echarts)
+
 // 分环境处理
 if (process.env.NODE_ENV === 'development') {
     app.config.devtools = true;

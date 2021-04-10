@@ -146,9 +146,9 @@ const routes = [,
         meta: { requiresAuth: true }
       },
       {
-        name: 'RevenueDetail',
-        path: 'revdetail',
-        component: () => import('../views/financial/RevenueDetail.vue'),
+        name: 'ChannelFeedback',
+        path: 'channelfb',
+        component: () => import('../views/financial/ChannelFeedback.vue'),
         meta: { requiresAuth: true }
       },
       {
@@ -158,9 +158,9 @@ const routes = [,
         meta: { requiresAuth: true }
       },
       {
-        name: 'ReturnFee',
-        path: 'rtnfee',
-        component: () => import('../views/financial/ReturnFee.vue'),
+        name: 'Refund',
+        path: 'refund',
+        component: () => import('../views/financial/Refund.vue'),
         meta: { requiresAuth: true }
       },
       {

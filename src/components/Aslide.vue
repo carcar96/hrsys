@@ -185,16 +185,16 @@ export default {
               path: "revenue",
             },
             {
-              title: "项目营收明细表",
-              path: "revdetail",
-            },
-            {
               title: "归属核对反馈表",
               path: "attrcheck",
             },
             {
+              title: "渠道费用反馈表",
+              path: "channelfb",
+            },
+            {
               title: "项目返费表",
-              path: "rtnfee",
+              path: "refund",
             },
             {
               title: "项目工资表",
@@ -273,8 +273,8 @@ export default {
           });
         }
       });
-      console.log(bcList);
-      this.$store.dispatch("setStateByKey", { key: "bcList", value: bcList });
+
+      this.$store.commit("updateStateByKey", { key: "bcList", value: bcList });
       this.updateSelectKey();
     },
     updateSelectKey() {

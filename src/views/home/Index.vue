@@ -64,7 +64,6 @@
               style="width: 100%"
               height="100%"
               border
-              highlight-current-row
               size="medium"
               :header-cell-style="{ backgroundColor: '#F3F3F3' }"
               :cell-style="setCellColor"
@@ -88,7 +87,7 @@
               <el-table-column
                 prop="require"
                 label="招聘要求及薪资结构"
-                width="300"
+                width="400"
                 sortable
                 align="center"
               >
@@ -96,7 +95,7 @@
               <el-table-column
                 prop="age"
                 label="年龄"
-                width="120"
+                width="150"
                 sortable
                 align="center"
               >
@@ -112,14 +111,14 @@
               <el-table-column
                 prop="date"
                 label="面试时间"
-                width="150"
+                width="200"
                 sortable
                 align="center"
               >
               </el-table-column>
               <el-table-column prop="note" label="备注" sortable align="center">
               </el-table-column>
-              <el-table-column label="操作" width="140" align="center">
+              <el-table-column label="操作" width="150" align="center">
                 <template #default="scope">
                   <el-button @click="handleClick(scope.row)" type="text"
                     >查看企业详情</el-button
@@ -154,6 +153,7 @@ export default {
     const item = {
       date: "2016-05-03 09:00 - 10:00",
       name: "华为",
+      company: "华为股份有限公司",
       interview: "待定",
       require:
         "底薪2000元+夜班津贴20元/夜班(越520元/月)+月度绩效0-400元/月+认证津贴0-400元/月+加班费1700-2500元/月；主要负责全自动化机台的操作，具备一定的英文基础，无色盲色弱，能适应无尘室车间环境及倒班。吃饭餐补550元/月，体检免费住宿4-6人间空调热水器齐全",
@@ -229,6 +229,10 @@ export default {
     },
     handleClick(row) {
       console.log(row);
+      let bcList = this.$store.state.bcList;
+      bcList[1] = row.company;
+      this.$store.commit("updateStateByKey", { key: "bcList", value: bcList });
+      this.$router.push({ name: "CoDetail" }); // 跳转
     },
     sortChange(data) {
       console.log(data);
