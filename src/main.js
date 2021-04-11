@@ -8,7 +8,7 @@ const $moment = require("moment");
 //echarts
 import * as $echarts from 'echarts'
 // element-plus
-import { ElRadioGroup, ElRadioButton, ElCard, ElInfiniteScroll, ElRow, ElCol, ElCarousel, ElCarouselItem, ElUpload, ElImage, ElRadio, ElMessage, ElMessageBox, ElDialog, ElDivider, ElSpace, ElAvatar, ElSelect, ElOption, ElPagination, ElFooter, ElDatePicker, ElBadge, ElPopper, ElBreadcrumb, ElBreadcrumbItem, ElButton, ElInput, ElForm, ElFormItem, ElHeader, ElContainer, ElAside, ElMenu, ElSubmenu, ElMenuItemGroup, ElMenuItem, ElDropdown, ElDropdownMenu, ElDropdownItem, ElMain, ElTable, ElTableColumn } from 'element-plus';
+import { ElSwitch, ElTabs, ElTabPane, ElRadioGroup, ElRadioButton, ElCard, ElInfiniteScroll, ElRow, ElCol, ElCarousel, ElCarouselItem, ElUpload, ElImage, ElRadio, ElMessage, ElMessageBox, ElDialog, ElDivider, ElSpace, ElAvatar, ElSelect, ElOption, ElPagination, ElFooter, ElDatePicker, ElBadge, ElPopper, ElBreadcrumb, ElBreadcrumbItem, ElButton, ElInput, ElForm, ElFormItem, ElHeader, ElContainer, ElAside, ElMenu, ElSubmenu, ElMenuItemGroup, ElMenuItem, ElDropdown, ElDropdownMenu, ElDropdownItem, ElMain, ElTable, ElTableColumn } from 'element-plus';
 import 'element-plus/packages/theme-chalk/src/base.scss';
 import lang from 'element-plus/lib/locale/lang/zh-cn'
 import 'dayjs/locale/zh-cn'
@@ -16,6 +16,7 @@ import locale from 'element-plus/lib/locale'
 // 设置ele+语言
 locale.use(lang);
 const components = [
+    ElSwitch,
     ElRadioGroup,
     ElRadioButton,
     ElCard,
@@ -56,6 +57,7 @@ const components = [
     ElCarouselItem,
     ElCol,
     ElRow,
+    ElTabs, ElTabPane,
 ]
 const plugins = [
     ElInfiniteScroll,

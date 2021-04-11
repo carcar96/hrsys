@@ -310,11 +310,12 @@ export default {
             return prev;
           }
         }, 0);
+        total = total.toFixed(2);
       } else {
         total = "N/A";
       }
 
-      return total.toFixed(2);
+      return total;
     },
     channelSummaries(param) {
       const { columns, data } = param;
@@ -396,71 +397,6 @@ export default {
         option.series[0].data = pData.data;
         this.chartPie[domId].setOption(option);
       }
-    },
-    getSummaries(param) {
-      const { columns, data } = param;
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = "总计";
-          return;
-        }
-        let prop = column.property;
-        if (
-          ["refund", "amount", "difference"].findIndex(
-            (item) => item === prop
-          ) > -1
-        ) {
-          const values = data.map((item) => Number(item[column.property]));
-          if (!values.every((value) => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-          } else {
-            sums[index] = "N/A";
-          }
-        } else {
-          sums[index] = "";
-        }
-      });
-
-      return sums;
-    },
-    paySummaries(param) {
-      const { columns, data } = param;
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = "总计";
-          return;
-        }
-        let prop = column.property;
-        if (prop == "amount") {
-          const values = data.map((item) => Number(item[column.property]));
-          if (!values.every((value) => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[index] = sums[index].toFixed(2);
-          } else {
-            sums[index] = "N/A";
-          }
-        } else {
-          sums[index] = "";
-        }
-      });
-
-      return sums;
     },
   },
 };

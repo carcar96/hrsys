@@ -9,7 +9,7 @@
         <Aslide :isCollapse="isCollapse" />
       </el-aside>
       <el-container>
-        <el-header>
+        <el-header class="c-header">
           <Header :isCollapse="isCollapse" @toggleCollapse="toggleCollapse" />
         </el-header>
         <el-main>
@@ -96,10 +96,8 @@ export default {
     height: 100%;
     border: 1px solid #eee;
 
-    .el-header {
-      height: 60px;
-      line-height: 60px;
-      border-bottom: 1px solid #ccc;
+    .c-header {
+      padding: 0;
     }
 
     .el-aside {

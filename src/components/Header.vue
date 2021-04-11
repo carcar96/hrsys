@@ -1,5 +1,5 @@
 <template>
-  <div id="header">
+  <div id="header" class="c-header">
     <div class="h-left">
       <i
         @click="toggleCollapse"
@@ -19,37 +19,53 @@
       <el-badge class="item" type="danger" value="3" @click="onMessage()"
         ><i class="el-icon-message"></i
       ></el-badge>
-      <el-avatar
-        class="thumb"
-        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-      ></el-avatar>
-      <el-dropdown>
-        <span class="username"
-          >王小虎<i
-            class="el-icon-more"
-            style="margin-left: 10px; transform: rotate(90deg)"
-          ></i
-        ></span>
+      <el-dropdown @command="handleCommand">
+        <div class="display:inline-block">
+          <el-avatar
+            class="thumb"
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          ></el-avatar>
+          <span class="username"
+            >王小虎<i
+              class="el-icon-more"
+              style="margin-left: 10px; transform: rotate(90deg)"
+            ></i
+          ></span>
+        </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item icon="el-icon-info">关于</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-switch-button"
+            <el-dropdown-item command="about" icon="el-icon-info"
+              >关于</el-dropdown-item
+            >
+            <el-dropdown-item command="logout" icon="el-icon-switch-button"
               >注销</el-dropdown-item
             >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
     </div>
+    <!-- 消息 -->
+    <MessageListDialog :isShow="showMessage" @closed="showMessage = false" />
+    <!-- 关于 -->
+    <About :isShow="showAbout" @closed="showAbout = false" />
   </div>
 </template>
 
 <script>
-import { ElMessage } from "element-plus";
+import MessageListDialog from "@/components/MessageListDialog.vue";
+import About from "@/components/About.vue";
 export default {
   name: "Header",
   props: ["isCollapse"],
+  components: {
+    MessageListDialog,
+    About,
+  },
   data() {
-    return {};
+    return {
+      showMessage: false,
+      showAbout: false,
+    };
   },
   computed: {
     bcList() {
@@ -61,16 +77,36 @@ export default {
       this.$emit("toggleCollapse");
     },
     onMessage() {
-      ElMessage.warning({
-        message: "暂不支持",
-        type: "warning",
-      });
+      this.showMessage = true;
+    },
+    handleCommand(command) {
+      switch (command) {
+        case "about":
+          this.showAbout = true;
+          break;
+        case "logout":
+          this.$message({
+            message: command,
+            type: "warning",
+          });
+          break;
+        default:
+          break;
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.c-header {
+  padding: 0 20px !important;
+  height: 60px;
+  line-height: 60px;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
 .toggle-collapse:hover {
   cursor: pointer;
   color: #409eff;
@@ -79,6 +115,7 @@ export default {
 .el-badge {
   line-height: 1;
   cursor: pointer;
+  margin-right: 30px;
 }
 
 .el-breadcrumb {
@@ -107,12 +144,16 @@ export default {
   .thumb {
     border: 1px solid #bbbbbb;
     vertical-align: middle;
-    margin-left: 28px;
-    margin-right: 12px;
+    margin-right: 10px;
+    cursor: pointer;
   }
 
   .username {
     cursor: pointer;
   }
+}
+
+.el-dropdown-menu__item {
+  width: 80px;
 }
 </style>

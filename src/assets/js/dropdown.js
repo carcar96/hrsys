@@ -169,6 +169,48 @@ const entCateOptions = [
     },
 ]
 
+const rpDtypeOptions = [
+    {
+        value: "1",
+        label: "微信数",
+    },
+    {
+        value: "2",
+        label: "意向",
+    },
+    {
+        value: "3",
+        label: "面到",
+    },
+    {
+        value: "4",
+        label: "面过",
+    },
+    {
+        value: "5",
+        label: "入职",
+    },
+    {
+        value: "6",
+        label: "流失",
+    },
+]
+
+const msgTypeOptions = [
+    {
+        value: "1",
+        label: "员工入职",
+    },
+    {
+        value: "2",
+        label: "企业动态",
+    },
+    {
+        value: "3",
+        label: "员工分享",
+    },
+]
+
 export {
     sexOptions,
     wxOptions,
@@ -179,4 +221,6 @@ export {
     educateOptions,
     personCateOptions,
     entCateOptions,
+    rpDtypeOptions,
+    msgTypeOptions,
 }
