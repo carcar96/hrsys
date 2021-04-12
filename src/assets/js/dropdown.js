@@ -211,6 +211,25 @@ const msgTypeOptions = [
     },
 ]
 
+const staffLevelOptions = [
+    {
+        value: "1",
+        label: "经理",
+    },
+    {
+        value: "2",
+        label: "主管",
+    },
+    {
+        value: "3",
+        label: "组长",
+    },
+    {
+        value: "4",
+        label: "员工",
+    },
+]
+
 export {
     sexOptions,
     wxOptions,
@@ -223,4 +242,5 @@ export {
     entCateOptions,
     rpDtypeOptions,
     msgTypeOptions,
+    staffLevelOptions
 }

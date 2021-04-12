@@ -97,9 +97,6 @@
                 sortable
                 align="center"
               >
-                <template #default="scope">
-                  <div v-html="scope.row.content"></div>
-                </template>
               </el-table-column>
               <el-table-column
                 prop="status"
