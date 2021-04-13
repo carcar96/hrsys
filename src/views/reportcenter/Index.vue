@@ -455,8 +455,6 @@ export default {
     height: 100%;
   }
 
-  padding: 0 20px;
-
   .table-box {
     padding-top: 0;
     padding-bottom: 0;

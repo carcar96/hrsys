@@ -1,5 +1,5 @@
 <template>
-  <div id="wage" class="wage">
+  <div id="finance-wage" class="finance-wage">
     <el-container>
       <el-header height="auto;">
         <el-form
@@ -9,19 +9,14 @@
           ref="searchForm"
           size="medium"
         >
-          <el-form-item label="时间" prop="date">
-            <el-select v-model="searchForm.date" placeholder="请选择">
-              <el-option label="全部" value="0"> </el-option>
-              <el-option
-                v-for="item in sexOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
+          <el-form-item label="求职者身份证号" prop="idcard">
+            <el-input
+              size="medium"
+              placeholder="请输入身份证号"
+              v-model="searchForm.idcard"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="项目" prop="project">
+          <el-form-item label="输送项目" prop="project">
             <el-select v-model="searchForm.project" placeholder="请选择">
               <el-option label="全部" value="0"> </el-option>
               <el-option
@@ -33,12 +28,17 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="员工姓名" prop="name">
-            <el-input
-              size="medium"
-              placeholder="请输入姓名"
-              v-model="searchForm.name"
-            ></el-input>
+          <el-form-item label="所属渠道" prop="channel">
+            <el-select v-model="searchForm.channel" placeholder="请选择">
+              <el-option label="全部" value="0"> </el-option>
+              <el-option
+                v-for="item in sexOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitSearchForm('searchForm')"
@@ -47,10 +47,12 @@
             <el-button type="warning" @click="resetSearchForm('searchForm')"
               >重置</el-button
             >
+            <el-button type="success" @click="handleAdd">增加</el-button>
+            <el-button type="danger" @click="handleImport">导入</el-button>
           </el-form-item>
         </el-form>
       </el-header>
-      <el-main class="table-box">
+      <el-main>
         <el-container>
           <el-main>
             <el-table
@@ -205,9 +207,9 @@ export default {
         },
       ],
       searchForm: {
-        date: "0",
+        idcard: "",
         project: "0",
-        name: "",
+        channel: "0",
       },
       tableData: [
         {
@@ -678,33 +680,32 @@ export default {
 
       return sums;
     },
+    handleAdd() {
+      this.dialogTitle = "增加项目返费";
+      this.dialogVisible = true;
+    },
+    handleImport() {},
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.wage {
+.finance-wage {
   height: 100%;
 
   .el-container {
     height: 100%;
   }
 
-  .table-box {
-    padding-top: 0;
-    padding-bottom: 0;
+  .el-header,
+  .el-main,
+  .el-footer {
+    padding: 0;
+  }
 
-    .el-container,
-    .el-header,
-    .el-main,
-    .el-footer {
-      padding: 0;
-    }
-
-    .table-pagination {
-      text-align: center;
-      margin-top: 20px;
-    }
+  .table-pagination {
+    text-align: center;
+    margin-top: 20px;
   }
 }
 </style>

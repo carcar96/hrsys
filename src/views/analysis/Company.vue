@@ -564,7 +564,7 @@ export default {
 
     .i-card {
       margin-bottom: 20px;
-      width: 47%;
+      width: 46%;
       margin-right: 3%;
       min-width: 480px;
     }

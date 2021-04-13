@@ -49,7 +49,7 @@ export default {
 
 <style lang="scss" scoped>
 .auth-manage {
-  padding: 20px;
+  padding: 0 20px;
   height: 100%;
   box-sizing: border-box;
 }

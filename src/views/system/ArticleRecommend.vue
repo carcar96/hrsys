@@ -104,7 +104,7 @@
               >
                 <template #default="scope">
                   <el-image
-                    style="width: 120px"
+                    style="width: 100px"
                     :preview-src-list="[scope.row.pic]"
                     :src="scope.row.pic"
                   >
@@ -190,7 +190,7 @@
         :rules="rules"
         ref="article-rec-form"
         label-width="auto"
-        size="small"
+        size="medium"
         class="article-rec-form"
       >
         <el-form-item label="标题" prop="title">
@@ -400,37 +400,40 @@ export default {
 
 
 <style lang="scss" scoped>
-.article-rec,
-.el-container {
+.article-rec {
   height: 100%;
-}
 
-.table-box {
-  padding-top: 0;
-  padding-bottom: 0;
-
-  .el-container,
-  .el-header,
-  .el-main,
-  .el-footer {
-    padding: 0;
+  .el-container {
+    height: 100%;
   }
 
-  .table-title {
-    font-size: 20px;
-    text-align: center;
-    line-height: 46px;
-    background-color: #f7f7f7;
+  .table-box {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .el-container,
+    .el-header,
+    .el-main,
+    .el-footer {
+      padding: 0;
+    }
+
+    .table-title {
+      font-size: 20px;
+      text-align: center;
+      line-height: 46px;
+      background-color: #f7f7f7;
+    }
+
+    .table-pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
   }
 
-  .table-pagination {
-    text-align: center;
-    margin-top: 20px;
+  .article-rec-form {
+    padding: 0 20px;
   }
-}
-
-.article-rec-form {
-  padding: 0 20px;
 }
 </style>
 <style>
