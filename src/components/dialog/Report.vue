@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import UploadImage from "@/components/UploadImage.vue";
+import UploadImage from "@/components/common/UploadImage.vue";
 export default {
   props: ["isShow", "formData"],
   components: {

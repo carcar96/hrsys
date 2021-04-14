@@ -224,7 +224,7 @@
 </template>
 
 <script>
-import TinymceEditor from "@/components/TinymceEditor.vue";
+import TinymceEditor from "@/components/common/TinymceEditor.vue";
 export default {
   components: { TinymceEditor },
   data() {

@@ -120,8 +120,12 @@
               </el-table-column>
               <el-table-column label="操作" width="150" align="center">
                 <template #default="scope">
-                  <el-button @click="handleClick(scope.row)" type="text"
-                    >查看企业详情</el-button
+                  <router-link
+                    :to="{
+                      name: 'EntDetail',
+                      params: scope.row,
+                    }"
+                    >查看企业详情</router-link
                   >
                 </template>
               </el-table-column>
@@ -151,6 +155,7 @@
 export default {
   data() {
     const item = {
+      id: "1",
       date: "2016-05-03 09:00 - 10:00",
       name: "华为",
       company: "华为股份有限公司",
@@ -232,7 +237,7 @@ export default {
       let bcList = this.$store.state.bcList;
       bcList[1] = row.company;
       this.$store.commit("updateStateByKey", { key: "bcList", value: bcList });
-      this.$router.push({ name: "CoDetail" }); // 跳转
+      this.$router.push({ name: "EntDetail" }); // 跳转
     },
     sortChange(data) {
       console.log(data);

@@ -248,8 +248,8 @@ import {
   workmodeOptions,
   educateOptions,
 } from "@/assets/js/dropdown.js";
-import Follow from "@/components/Follow.vue";
-import Applicant from "@/components/ApplicantDialog.vue";
+import Follow from "@/components/dialog/Follow.vue";
+import Applicant from "@/components/dialog/Applicant.vue";
 export default {
   components: {
     Follow,

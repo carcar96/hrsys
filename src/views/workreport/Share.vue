@@ -111,8 +111,19 @@
               </el-table-column>
               <el-table-column label="操作" width="120" align="center">
                 <template #default="scope">
-                  <el-button @click="handleEdit(scope.row)" type="text"
-                    >查看</el-button
+                  <el-button
+                    @click="handleEdit(scope.row)"
+                    type="text"
+                    v-if="scope.row.status == 1"
+                    >编辑</el-button
+                  >
+                  <router-link
+                    :to="{
+                      name: 'ShareDetail',
+                      params: scope.row,
+                    }"
+                    v-else
+                    >查看</router-link
                   >
                 </template>
               </el-table-column>
@@ -179,7 +190,7 @@
 </template>
 
 <script>
-import TinymceEditor from "@/components/TinymceEditor.vue";
+import TinymceEditor from "@/components/common/TinymceEditor.vue";
 export default {
   components: { TinymceEditor },
   data() {

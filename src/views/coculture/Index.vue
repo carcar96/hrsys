@@ -1,6 +1,6 @@
 <template>
   <div id="coculture" class="coculture">
-    <el-form
+    <!-- <el-form
       :inline="true"
       :model="searchForm"
       :rules="searchRule"
@@ -28,7 +28,7 @@
           >发布动态</el-button
         >
       </el-form-item>
-    </el-form>
+    </el-form> -->
     <div class="co-info">
       <p style="text-align: right">
         <el-button type="primary" size="small" @click="handleEditCulture"
@@ -47,31 +47,42 @@
       <div class="content" v-html="coInfo.corevalues"></div>
     </div>
     <div class="pages">
-      <el-row>
-        <el-col :span="11" class="inner">
+      <el-row :gutter="50">
+        <el-col :md="24" :lg="12" class="inner">
           <div class="dynamic">
-            <div class="title">企业动态</div>
+            <div class="title">
+              <span>企业动态</span>
+              <el-button type="primary" size="small" @click="handleAddNews"
+                >发布</el-button
+              >
+            </div>
             <div class="infinite-list-wrapper">
               <ul
                 class="list"
                 v-infinite-scroll="loadDynamic"
                 infinite-scroll-disabled="dynamicDisabled"
               >
-                <li v-for="i in dynamicCount" :key="i" class="list-item">
+                <li v-for="(item, i) in dynamicList" :key="i" class="list-item">
                   <el-row>
                     <el-col :span="5">
                       <div class="list-item-cell">
-                        <span>2020-12-14</span>
+                        <span class="date">{{ item.date }}</span>
                       </div>
                     </el-col>
                     <el-col :span="15">
                       <div class="list-item-cell">
-                        <router-link to="#">元旦放假通知</router-link>
+                        <router-link
+                          :to="{
+                            name: 'DynamicDetail',
+                            params: item,
+                          }"
+                          >{{ item.title }}</router-link
+                        >
                       </div>
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="4" align="right">
                       <div class="list-item-cell">
-                        <span>20次浏览</span>
+                        <span>{{ item.views }}次浏览</span>
                       </div>
                     </el-col>
                   </el-row>
@@ -84,8 +95,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="2"></el-col>
-        <el-col :span="11" class="inner">
+        <el-col :md="24" :lg="12" class="inner">
           <div class="share">
             <div class="title">员工分享</div>
             <div class="infinite-list-wrapper">
@@ -94,28 +104,32 @@
                 v-infinite-scroll="loadShare"
                 infinite-scroll-disabled="shareDisabled"
               >
-                <li v-for="i in shareCount" :key="i" class="list-item">
+                <li v-for="(item, i) in shareList" :key="i" class="list-item">
                   <el-row>
                     <el-col :span="5">
                       <div class="list-item-cell">
-                        <span>2020-12-14</span>
+                        <span class="date">{{ item.date }}</span>
                       </div>
                     </el-col>
-                    <el-col :span="11">
+                    <el-col :span="12">
                       <div class="list-item-cell">
-                        <router-link to="#"
-                          >给企业推荐工人的三大方法</router-link
+                        <router-link
+                          :to="{
+                            name: 'ShareDetail',
+                            params: item,
+                          }"
+                          >{{ item.title }}</router-link
                         >
                       </div>
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="3">
                       <div class="list-item-cell">
-                        <span>刘倩</span>
+                        <span>{{ item.author }}</span>
                       </div>
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="4" align="right">
                       <div class="list-item-cell">
-                        <span>20次浏览</span>
+                        <span>{{ item.views }}次浏览</span>
                       </div>
                     </el-col>
                   </el-row>
@@ -165,7 +179,7 @@
       </template>
     </el-dialog>
     <!-- 修改企业文化 -->
-    <el-dialog title="发布企业动态" v-model="editDialogVisible" width="600px">
+    <el-dialog title="修改企业文化" v-model="editDialogVisible" width="600px">
       <el-form
         :model="editForm"
         :rules="editRule"
@@ -214,7 +228,7 @@
 </template>
 
 <script>
-import TinymceEditor from "@/components/TinymceEditor.vue";
+import TinymceEditor from "@/components/common/TinymceEditor.vue";
 export default {
   components: { TinymceEditor },
   data() {
@@ -254,7 +268,126 @@ export default {
           { required: true, message: "请输入核心价值观", trigger: "blur" },
         ],
       },
-      dynamicCount: 15,
+      dynamicList: [
+        {
+          id: 1,
+          date: "2020-12-14",
+          title: "元旦放假通知",
+          content: "元旦放假通知",
+          views: 20,
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "元旦放假通知",
+          content: "元旦放假通知",
+          views: 30,
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "元旦放假通知",
+          content: "元旦放假通知",
+          views: 30,
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "元旦放假通知",
+          content: "元旦放假通知",
+          views: 30,
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "元旦放假通知",
+          content: "元旦放假通知",
+          views: 30,
+        },
+      ],
+      shareList: [
+        {
+          id: 1,
+          date: "2020-12-14",
+          title: "给企业推荐工人的三大方法",
+          content: "给企业推荐工人的三大方法",
+          views: 120,
+          author: "刘倩",
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "如何将入职率提到最高",
+          content: "如何将入职率提到最高",
+          views: 130,
+          author: "刘小倩",
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "如何将入职率提到最高",
+          content: "如何将入职率提到最高",
+          views: 130,
+          author: "刘小倩",
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "如何将入职率提到最高",
+          content: "如何将入职率提到最高",
+          views: 130,
+          author: "刘小倩",
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "如何将入职率提到最高",
+          content: "如何将入职率提到最高",
+          views: 130,
+          author: "刘小倩",
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "如何将入职率提到最高",
+          content: "如何将入职率提到最高",
+          views: 130,
+          author: "刘小倩",
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "如何将入职率提到最高",
+          content: "如何将入职率提到最高",
+          views: 130,
+          author: "刘小倩",
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "如何将入职率提到最高",
+          content: "如何将入职率提到最高",
+          views: 130,
+          author: "刘小倩",
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "如何将入职率提到最高",
+          content: "如何将入职率提到最高",
+          views: 130,
+          author: "刘小倩",
+        },
+        {
+          id: 2,
+          date: "2020-12-14",
+          title: "如何将入职率提到最高",
+          content: "如何将入职率提到最高",
+          views: 130,
+          author: "刘小倩",
+        },
+      ],
+      dynamicCount: 5,
       dynamicLoading: false,
       shareCount: 10,
       shareLoading: false,
@@ -262,13 +395,13 @@ export default {
   },
   computed: {
     noMoreDynamic() {
-      return this.dynamicCount >= 20;
+      return this.dynamicCount >= 5;
     },
     dynamicDisabled() {
       return this.dynamicLoading || this.noMoreDynamic;
     },
     noMoreShare() {
-      return this.shareCount >= 20;
+      return this.shareCount >= 10;
     },
     shareDisabled() {
       return this.shareLoading || this.noMoreShare;
@@ -345,9 +478,9 @@ export default {
   padding: 0 20px;
 
   .co-info {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 12px 16px;
+    border-radius: 2px;
+    padding: 16px 20px;
+    box-shadow: 0 0 6px #ddd;
     .content {
       margin-top: 6px;
       margin-bottom: 16px;
@@ -355,31 +488,50 @@ export default {
   }
 
   .pages {
-    margin-top: 20px;
-
     .inner {
       .dynamic,
       .share {
-        border: 1px solid #ddd;
+        margin-top: 30px;
+        box-shadow: 0 0 6px #ccc;
         .title {
           background-color: #f7f7f7;
-          padding: 10px;
+          padding: 16px 20px;
           border-bottom: 1px solid #ddd;
+          font-weight: 600;
+          font-size: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
         }
         .infinite-list-wrapper {
           overflow: auto;
           height: 340px;
-          padding: 10px;
+          padding: 6px 20px;
 
           .list-item {
-            padding-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-top: 10px;
+
+            a {
+              text-decoration: none;
+              color: #54a4fc;
+            }
+
+            .date {
+              vertical-align: middle;
+            }
+
+            &:last-child {
+              border: none;
+            }
           }
 
           .tip {
             color: #999;
             text-align: center;
             font-size: 12px;
-            line-height: 40px;
+            line-height: 44px;
           }
         }
       }

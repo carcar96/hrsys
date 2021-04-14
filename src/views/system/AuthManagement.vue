@@ -60,7 +60,7 @@ export default {
     height: 100%;
 
     .el-tabs__content {
-      height: calc(100% - 41px);
+      height: calc(100% - 56px);
 
       .el-tab-pane {
         height: 100%;

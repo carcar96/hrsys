@@ -86,12 +86,6 @@ const routes = [,
         meta: { requiresAuth: true }
       },
       {
-        name: 'CoDetail',
-        path: 'codetail',
-        component: () => import('../views/cobrochure/Detail.vue'),
-        meta: { requiresAuth: true }
-      },
-      {
         name: 'CoCulture',
         path: 'coculture',
         component: () => import('../views/coculture/Index.vue'),
@@ -199,6 +193,24 @@ const routes = [,
     path: '/login',
     name: 'Login',
     component: () => import('../views/auth/Login.vue')
+  },
+  {
+    path: '/background/enterprise/:id',
+    name: 'EntDetail',
+    component: () => import('../views/detail/Enterprise.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/background/share/:id',
+    name: 'ShareDetail',
+    component: () => import('../views/detail/Share.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/background/dynamic/:id',
+    name: 'DynamicDetail',
+    component: () => import('../views/detail/Dynamic.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/:catchAll(.*)',

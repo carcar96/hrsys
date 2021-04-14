@@ -22,4 +22,15 @@ ul {
 textarea {
   font-family: Avenir, Helvetica, Arial, sans-serif;
 }
+
+a {
+  color: #54a4fc;
+  text-decoration: none;
+}
+a:hover {
+  color: #2380e6;
+}
+a:active {
+  color: #2380e6;
+}
 </style>

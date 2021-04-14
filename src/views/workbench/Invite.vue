@@ -541,7 +541,7 @@ import {
   workmodeOptions,
   entryOptions,
 } from "@/assets/js/dropdown.js";
-import Follow from "@/components/Follow.vue";
+import Follow from "@/components/dialog/Follow.vue";
 export default {
   components: {
     Follow,

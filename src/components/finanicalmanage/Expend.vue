@@ -34,7 +34,7 @@
               >重置</el-button
             >
             <el-button type="success" @click="handleAdd">增加</el-button>
-            <el-button type="danger" @click="handleImport">导入</el-button>
+            <!-- <el-button type="danger" @click="handleImport">导入</el-button> -->
           </el-form-item>
         </el-form>
       </el-header>
@@ -212,7 +212,7 @@
 </template>
 
 <script>
-import UploadImage from "@/components/UploadImage.vue";
+import UploadImage from "@/components/common/UploadImage.vue";
 export default {
   components: {
     UploadImage,
@@ -307,7 +307,7 @@ export default {
         amount: [
           { required: true, message: "金额不能为空" },
           {
-            pattern: /^([1-9][0-9]*)+(.[0-9]{1,2})?$/,
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
             message: "请输入金额，最多 2 位小数",
           },
         ],

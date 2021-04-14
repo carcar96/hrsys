@@ -48,7 +48,7 @@
               >重置</el-button
             >
             <el-button type="success" @click="handleAdd">增加</el-button>
-            <el-button type="danger" @click="handleImport">导入</el-button>
+            <!-- <el-button type="danger" @click="handleImport">导入</el-button> -->
           </el-form-item>
         </el-form>
       </el-header>
@@ -129,15 +129,12 @@
                 label="补贴合计"
                 align="center"
               >
-                <template #default="scope">
-                  <span>{{ computedTotalSubsidy(scope.row) }}</span>
-                </template>
               </el-table-column>
-              <el-table-column prop="total_pay" label="应发合计" align="center">
-                <template #default="scope">
-                  <span>{{ computedTotalPay(scope.row) }}</span>
-                </template>
-              </el-table-column>
+              <el-table-column
+                prop="total_pay"
+                label="应发合计"
+                align="center"
+              ></el-table-column>
               <el-table-column prop="absence" label="缺勤扣发" align="center">
               </el-table-column>
               <el-table-column prop="fault" label="过失扣款" align="center">
@@ -149,7 +146,12 @@
                 align="center"
               >
               </el-table-column>
-              <el-table-column prop="person_tax" label="个税" align="center">
+              <el-table-column
+                prop="person_tax"
+                label="个税"
+                width="70"
+                align="center"
+              >
               </el-table-column>
               <el-table-column prop="union_fees" label="工会费" align="center">
               </el-table-column>
@@ -164,11 +166,27 @@
                 label="实发工资"
                 align="center"
               >
-                <template #default="scope">
-                  <span>{{ computedNetSalary(scope.row) }}</span>
-                </template>
               </el-table-column>
               <el-table-column prop="note" label="备注" align="center">
+                <template #default="scope">
+                  {{ scope.row.note || "-" }}
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="130" align="center">
+                <template #default="scope">
+                  <el-space spacer="/">
+                    <el-button
+                      @click="handleEdit(scope.row, scope.$index)"
+                      type="text"
+                      >编辑</el-button
+                    >
+                    <el-button
+                      @click="handleDelete(scope.row, scope.$index)"
+                      type="text"
+                      >删除</el-button
+                    >
+                  </el-space>
+                </template>
               </el-table-column>
             </el-table>
           </el-main>
@@ -189,6 +207,158 @@
         </el-container>
       </el-main>
     </el-container>
+    <!-- 模态框 -->
+    <el-dialog
+      :title="dialogTitle"
+      v-model="dialogVisible"
+      width="600px"
+      @closed="closed('form')"
+    >
+      <el-form
+        :model="form"
+        :rules="rules"
+        ref="form"
+        label-width="auto"
+        size="small"
+        class="form"
+      >
+        <div class="module-block">
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="form.name" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="工资月份" prop="date">
+            <el-date-picker
+              v-model="form.date"
+              type="month"
+              :clearable="false"
+              placeholder="请选择"
+              style="width: 215px"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="所属项目" prop="project">
+            <el-select v-model="form.project" placeholder="请选择">
+              <el-option
+                v-for="item in sexOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div class="module-block">
+          <el-form-item label="工资级别" prop="level">
+            <el-input v-model="form.level" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="试用期小时工资" prop="basic_wage">
+            <el-input v-model="form.basic_wage" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="实际绩效工资" prop="merit_pay">
+            <el-input v-model="form.merit_pay" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="岗位补贴" prop="post_subsidy">
+            <el-input
+              v-model="form.post_subsidy"
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="加班工资" prop="overtime_pay">
+            <el-input
+              v-model="form.overtime_pay"
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <div class="module-block">
+          <el-form-item label="夜班补贴" prop="night_subsidy">
+            <el-input
+              v-model="form.night_subsidy"
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="全勤奖" prop="full_attendance">
+            <el-input
+              v-model="form.full_attendance"
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="餐贴" prop="meal_stickers">
+            <el-input
+              v-model="form.meal_stickers"
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="考勤补款" prop="attendance_supplement">
+            <el-input
+              v-model="form.attendance_supplement"
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="补贴合计" prop="total_subsidy">
+            <el-input
+              v-model="form.total_subsidy"
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <div class="module-block">
+          <el-form-item label="应发合计" prop="total_pay">
+            <el-input v-model="form.total_pay" placeholder="请输入"></el-input>
+          </el-form-item>
+        </div>
+        <div class="module-block">
+          <el-form-item label="缺勤扣发" prop="absence">
+            <el-input v-model="form.absence" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="过失扣款" prop="fault">
+            <el-input v-model="form.fault" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="水电费扣费" prop="water_and_electricity">
+            <el-input
+              v-model="form.water_and_electricity"
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="个税" prop="person_tax">
+            <el-input v-model="form.person_tax" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="工会费" prop="union_fees">
+            <el-input v-model="form.union_fees" placeholder="请输入"></el-input>
+          </el-form-item>
+          <el-form-item label="商业险" prop="commercial_insurance">
+            <el-input
+              v-model="form.commercial_insurance"
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <div class="module-block">
+          <el-form-item label="实发工资" prop="net_salary">
+            <el-input v-model="form.net_salary" placeholder="请输入"></el-input>
+          </el-form-item>
+        </div>
+        <div class="module-block">
+          <el-form-item label="备注" prop="note">
+            <el-input
+              v-model="form.note"
+              type="textarea"
+              :rows="3"
+              maxlength="50"
+              show-word-limit
+              placeholder="请输入"
+            ></el-input>
+          </el-form-item>
+        </div>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="submitForm('form')"
+            >确 定</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -551,7 +721,153 @@ export default {
       ],
       currentPage: 4,
       hideOnSinglePage: false,
+      dialogVisible: false,
+      dialogTitle: "",
+      form: {},
+      rules: {
+        name: [
+          {
+            required: true,
+            message: "不能为空",
+          },
+        ],
+        date: [{ required: true, message: "不能为空" }],
+        project: [{ required: true, message: "不能为空" }],
+        level: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        basic_wage: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        merit_pay: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        post_subsidy: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        overtime_pay: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        night_subsidy: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        full_attendance: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        meal_stickers: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        attendance_supplement: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        total_subsidy: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        total_pay: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        absence: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        fault: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        water_and_electricity: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        person_tax: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        union_fees: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        commercial_insurance: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+        net_salary: [
+          { required: true, message: "不能为空" },
+          {
+            pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+            message: "请输入金额，最多 2 位小数",
+          },
+        ],
+      },
     };
+  },
+  beforeMount() {
+    this.tableData.forEach((item, index) => {
+      this.tableData[index].total_subsidy = this.computedTotalSubsidy(item);
+      this.tableData[index].total_pay = this.computedTotalPay(item);
+      this.tableData[index].net_salary = this.computedNetSalary(item);
+    });
   },
   methods: {
     submitSearchForm(formName) {
@@ -681,10 +997,48 @@ export default {
       return sums;
     },
     handleAdd() {
-      this.dialogTitle = "增加项目返费";
+      this.dialogTitle = "增加项目工资";
       this.dialogVisible = true;
     },
     handleImport() {},
+    handleDelete(index, row) {
+      console.log(index, row);
+      this.$confirm("确认删除？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "已删除",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    handleEdit(row, index) {
+      console.log(index, row);
+      this.form = JSON.parse(JSON.stringify(row));
+      this.dialogTitle = "修改项目工资";
+      this.dialogVisible = true;
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid, obj) => {
+        if (valid) {
+          console.log("submit!", this.form);
+          this.dialogVisible = false;
+        } else {
+          console.log("error submit!!", obj);
+          return false;
+        }
+      });
+    },
+    closed(formName) {
+      this.form = {};
+      this.$refs[formName].resetFields();
+    },
   },
 };
 </script>
@@ -706,6 +1060,23 @@ export default {
   .table-pagination {
     text-align: center;
     margin-top: 20px;
+  }
+
+  .form {
+    padding: 0 20px;
+    .el-input,
+    .el-select,
+    .el-textarea {
+      width: 215px;
+    }
+
+    .module-block {
+      border: 1px solid #eee;
+      border-radius: 5px;
+      background-color: #f7f7f7;
+      margin-bottom: 10px;
+      padding: 20px 20px 0;
+    }
   }
 }
 </style>

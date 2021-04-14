@@ -78,7 +78,7 @@
               <el-table-column
                 prop="name"
                 label="姓名"
-                width="120"
+                width="100"
                 sortable
                 align="center"
               >
@@ -110,7 +110,7 @@
               <el-table-column
                 prop="wx_pic"
                 label="添加微信截图"
-                width="300"
+                width="250"
                 sortable
                 align="center"
               >
@@ -177,7 +177,7 @@
 </template>
 
 <script>
-import ReportDialog from "@/components/ReportDialog.vue";
+import ReportDialog from "@/components/dialog/Report.vue";
 export default {
   components: {
     ReportDialog,

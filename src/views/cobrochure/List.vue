@@ -194,8 +194,8 @@
 </template>
 
 <script>
-import TinymceEditor from "@/components/TinymceEditor.vue";
-import UploadImage from "@/components/UploadImage.vue";
+import TinymceEditor from "@/components/common/TinymceEditor.vue";
+import UploadImage from "@/components/common/UploadImage.vue";
 export default {
   components: {
     TinymceEditor,
@@ -297,10 +297,11 @@ export default {
       this.dialogVisible = true;
     },
     handleDetail(row) {
-      let bcList = this.$store.state.bcList;
-      bcList[1] = row.company;
-      this.$store.commit("updateStateByKey", { key: "bcList", value: bcList });
-      this.$router.push({ name: "CoDetail" }); // 跳转
+      // let bcList = this.$store.state.bcList;
+      // bcList[1] = row.company;
+      // this.$store.commit("updateStateByKey", { key: "bcList", value: bcList });
+      // this.$router.push({ name: "EntDetail" }); // 跳转
+      this.$router.push({ name: "EntDetail", params: row });
     },
     addCo(formName) {
       this.$refs[formName].validate((valid, obj) => {

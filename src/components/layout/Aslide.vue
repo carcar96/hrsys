@@ -16,7 +16,7 @@
       <el-menu-item index="/" class="system-box" disabled>
         <img
           class="logo"
-          src="../assets/images/logo.png"
+          src="../../assets/images/logo.png"
           alt="logo"
           width="24"
         />

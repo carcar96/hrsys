@@ -45,20 +45,20 @@
       </el-dropdown>
     </div>
     <!-- 消息 -->
-    <MessageListDialog :isShow="showMessage" @closed="showMessage = false" />
+    <Message :isShow="showMessage" @closed="showMessage = false" />
     <!-- 关于 -->
     <About :isShow="showAbout" @closed="showAbout = false" />
   </div>
 </template>
 
 <script>
-import MessageListDialog from "@/components/MessageListDialog.vue";
-import About from "@/components/About.vue";
+import Message from "@/components/dialog/Message.vue";
+import About from "@/components/dialog/About.vue";
 export default {
   name: "Header",
   props: ["isCollapse"],
   components: {
-    MessageListDialog,
+    Message,
     About,
   },
   data() {
@@ -85,10 +85,8 @@ export default {
           this.showAbout = true;
           break;
         case "logout":
-          this.$message({
-            message: command,
-            type: "warning",
-          });
+          localStorage.removeItem("userInfo");
+          this.$router.replace({ name: "Login" });
           break;
         default:
           break;
@@ -133,7 +131,7 @@ export default {
   font-size: 20px;
   .breadcrumb-box {
     display: inline-block;
-    margin-left: 16px;
+    margin-left: 24px;
   }
 }
 .h-right {

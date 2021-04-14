@@ -1,10 +1,10 @@
 <template>
   <div id="financial-manage" class="financial-manage">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane label="收入管理" name="organ">
+      <el-tab-pane label="收入管理" name="income">
         <Income />
       </el-tab-pane>
-      <el-tab-pane label="支出管理" name="staff">
+      <el-tab-pane label="支出管理" name="expend">
         <Expend />
       </el-tab-pane>
       <el-tab-pane label="项目营收" name="profit">
@@ -46,7 +46,7 @@ export default {
   },
   data() {
     return {
-      activeName: "target",
+      activeName: "income",
     };
   },
   methods: {

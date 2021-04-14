@@ -51,7 +51,7 @@
               >重置</el-button
             >
             <el-button type="success" @click="handleAdd">增加</el-button>
-            <el-button type="danger" @click="handleImport">导入</el-button>
+            <!-- <el-button type="danger" @click="handleImport">导入</el-button> -->
           </el-form-item>
         </el-form>
       </el-header>
@@ -208,6 +208,7 @@
     <el-dialog
       :title="dialogTitle"
       v-model="dialogVisible"
+      width="600px"
       @closed="closed('form')"
     >
       <el-form
@@ -596,6 +597,9 @@ export default {
     .el-input,
     .el-select {
       width: 220px;
+    }
+    .el-textarea {
+      width: 400px;
     }
   }
 }

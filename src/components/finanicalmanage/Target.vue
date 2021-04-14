@@ -33,7 +33,7 @@
               >重置</el-button
             >
             <el-button type="success" @click="handleAdd">增加</el-button>
-            <el-button type="danger" @click="handleImport">导入</el-button>
+            <!-- <el-button type="danger" @click="handleImport">导入</el-button> -->
           </el-form-item>
         </el-form>
       </el-header>
@@ -48,21 +48,16 @@
           :cell-style="setCellColor"
           @sort-change="sortChange"
         >
-          <el-table-column label="序号" type="index" width="54" align="center">
+          <el-table-column label="序号" type="index" width="50" align="center">
           </el-table-column>
-          <el-table-column prop="name" label="姓名" width="100" align="center">
+          <el-table-column prop="name" label="姓名" width="80" align="center">
           </el-table-column>
-          <el-table-column
-            prop="rolename"
-            label="角色名称"
-            width="150"
-            align="center"
-          >
+          <el-table-column prop="rolename" label="角色名称" align="center">
           </el-table-column>
           <el-table-column
             prop="levelname"
             label="职级"
-            width="90"
+            width="70"
             align="center"
           >
           </el-table-column>
@@ -76,14 +71,14 @@
           <el-table-column
             prop="groupname"
             label="所属分组"
-            width="100"
+            width="90"
             align="center"
           >
           </el-table-column>
           <el-table-column
             prop="month"
             :label="item + '月目标'"
-            width="90"
+            width="80"
             align="center"
             v-for="(item, index) in 12"
             :key="index"
@@ -96,7 +91,7 @@
               >
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150" align="center">
+          <el-table-column label="操作" width="130" align="center">
             <template #default="scope">
               <el-space spacer="/">
                 <el-button
@@ -133,7 +128,7 @@
     <el-dialog
       :title="dialogTitle"
       v-model="dialogVisible"
-      width="600px"
+      width="700px"
       @closed="closed('form')"
     >
       <el-form
@@ -144,10 +139,19 @@
         size="medium"
         class="form"
       >
-        <el-form-item label="在职企业" prop="company">
-          <el-select v-model="form.company" placeholder="请选择">
+        <el-form-item label="员工姓名" prop="name">
+          <el-autocomplete
+            v-model="form.name"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="请输入内容"
+            @select="handleSelectName"
+            style="width: 220px"
+          ></el-autocomplete>
+        </el-form-item>
+        <el-form-item label="考核目标" prop="target_type">
+          <el-select v-model="form.target_type" placeholder="请选择">
             <el-option
-              v-for="item in projectOptions"
+              v-for="item in targetOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -155,65 +159,33 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
+        <el-form-item label="考核年份" prop="year">
+          <el-date-picker v-model="form.year" type="year" placeholder="选择年">
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="联系方式" prop="contact">
-          <el-input
-            v-model="form.contact"
-            placeholder="请输入手机号"
-          ></el-input>
-          <el-button
-            type="primary"
-            @click="handleSearch"
-            style="margin-left: 10px"
-            >搜索</el-button
+        <el-divider v-show="form.year"></el-divider>
+        <div class="months">
+          <el-form-item
+            class="item"
+            v-show="form.year"
+            :label="index + 1 + '月目标'"
+            :prop="'targets.' + index + '.total'"
+            :rules="[
+              {
+                required: true,
+                message: '不能为空',
+              },
+              {
+                pattern: /(^[1-9]([0-9]+)?$)|(^(0){1}$)/,
+                message: '必须为非负整数',
+              },
+            ]"
+            v-for="(item, index) in form.targets"
+            :key="index"
           >
-        </el-form-item>
-        <el-divider></el-divider>
-        <el-form-item label="入职日期" prop="entry_date">
-          <el-date-picker
-            type="date"
-            placeholder="选择日期"
-            v-model="form.entry_date"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="离职日期" prop="leave_date">
-          <el-date-picker
-            type="date"
-            placeholder="选择日期"
-            v-model="form.leave_date"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="人员归属" prop="ownership">
-          <el-select v-model="form.ownership" placeholder="请选择">
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="对接盟友" prop="ally">
-          <el-select v-model="form.ally" placeholder="请选择">
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-divider></el-divider>
-        <el-form-item label="返费金额" prop="refund">
-          <el-input
-            v-model="form.refund"
-            placeholder="请输入返费金额"
-          ></el-input>
-        </el-form-item>
+            <el-input v-model="item.total" placeholder="请输入"></el-input>
+          </el-form-item>
+        </div>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -230,11 +202,13 @@
 export default {
   data() {
     const item = {
-      name: "徐冲",
+      name: "徐冲冲",
       rolename: "招聘1部组长",
       levelname: "组长",
       department: "招聘1部",
       groupname: "1组",
+      target_type: "1",
+      year: "2020",
       targets: [
         { finish: 90, total: 100 },
         { finish: 90, total: 100 },
@@ -251,14 +225,22 @@ export default {
       ],
     };
     return {
-      projectOptions: [
+      targetOptions: [
         {
           value: "1",
-          label: "男",
+          label: "意面",
         },
         {
           value: "2",
-          label: "女",
+          label: "面到",
+        },
+        {
+          value: "3",
+          label: "面过",
+        },
+        {
+          value: "4",
+          label: "入职",
         },
       ],
       channelOptions: [
@@ -298,33 +280,14 @@ export default {
       dialogTitle: "",
       form: {},
       rules: {
-        company: [
-          {
-            required: true,
-            message: "在职企业不能为空",
-          },
-        ],
         name: [
           {
             required: true,
-            message: "姓名不能为空",
+            message: "不能为空",
           },
         ],
-        contact: [
-          { required: true, message: "联系方式不能为空" },
-          {
-            pattern: /^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/,
-            message: "手机号格式不对",
-          },
-        ],
-        entry_date: [{ required: true, message: "入职日期不能为空" }],
-        refund: [
-          { required: true, message: "返费金额不能为空" },
-          {
-            pattern: /^([1-9][0-9]*)+(.[0-9]{1,2})?$/,
-            message: "请输入金额，最多 2 位小数",
-          },
-        ],
+        target_type: [{ required: true, message: "请选择" }],
+        year: [{ required: true, message: "请选择", trigger: "change" }],
       },
     };
   },
@@ -413,12 +376,26 @@ export default {
       let info = JSON.parse(JSON.stringify(row));
       info.date = this.$moment(info.date).format("YYYY-MM-DD");
       this.form = info;
-      this.dialogTitle = "修改收入";
+      this.dialogTitle = "修改员工目标";
       this.dialogVisible = true;
     },
     handleAdd() {
-      this.dialogTitle = "增加收入";
+      this.dialogTitle = "配置员工目标";
       this.dialogVisible = true;
+      this.form.targets = [
+        { total: "" },
+        { total: "" },
+        { total: "" },
+        { total: "" },
+        { total: "" },
+        { total: "" },
+        { total: "" },
+        { total: "" },
+        { total: "" },
+        { total: "" },
+        { total: "" },
+        { total: "" },
+      ];
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid, obj) => {
@@ -439,6 +416,13 @@ export default {
       this.$refs[formName].resetFields();
     },
     handleImport() {},
+    querySearchAsync(queryString) {
+      console.log(queryString);
+      return [];
+    },
+    handleSelectName(item) {
+      console.log(item);
+    },
   },
 };
 </script>
@@ -467,6 +451,15 @@ export default {
     .el-input,
     .el-select {
       width: 220px;
+    }
+
+    .months {
+      display: flex;
+      flex-wrap: wrap;
+
+      .item:nth-child(2n) {
+        margin-left: 20px;
+      }
     }
   }
 }

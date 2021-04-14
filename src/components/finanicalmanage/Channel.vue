@@ -41,7 +41,7 @@
               >重置</el-button
             >
             <el-button type="success" @click="handleAdd">增加</el-button>
-            <el-button type="danger" @click="handleImport">导入</el-button>
+            <!-- <el-button type="danger" @click="handleImport">导入</el-button> -->
           </el-form-item>
         </el-form>
       </el-header>
@@ -479,7 +479,6 @@ export default {
         }
 
         if (prop === "company") {
-          console.log(prop);
           const values = data.map((item) =>
             Number(item[column.property][column.columnKey])
           );

@@ -238,11 +238,7 @@
       </el-main>
     </el-container>
     <!-- 跟进动态 -->
-    <Follow
-      :isShow="showFollow"
-      :info="followUser"
-      @close="closeFollow"
-    />
+    <Follow :isShow="showFollow" :info="followUser" @close="closeFollow" />
     <!-- 编辑用户信息 -->
     <el-dialog
       title="用户信息"
@@ -478,7 +474,7 @@ import {
   wxOptions,
   workmodeOptions,
 } from "@/assets/js/dropdown.js";
-import Follow from "@/components/Follow.vue";
+import Follow from "@/components/dialog/Follow.vue";
 export default {
   components: {
     Follow,

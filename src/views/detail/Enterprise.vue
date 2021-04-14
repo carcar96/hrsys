@@ -1,13 +1,14 @@
 <template>
-  <div id="codetail" class="codetail">
+  <el-page-header @back="goBack" content="企业详情"> </el-page-header>
+  <div id="detail-enterprise" class="detail-enterprise">
     <div class="header">
-      <el-row>
-        <el-col :span="8"
+      <el-row :gutter="20">
+        <el-col :md="24" :lg="12"
           ><h1 class="company">武汉天马微电子有限公司</h1>
           <h4 class="nickname">简称：天马</h4></el-col
         >
-        <el-col :span="16"
-          ><el-carousel :interval="4000" type="card" height="80px">
+        <el-col :md="24" :lg="12"
+          ><el-carousel :interval="4000" type="card" height="100px">
             <el-carousel-item v-for="item in 6" :key="item">
               <img src="../../assets/images/bg.jpg" />
             </el-carousel-item> </el-carousel
@@ -39,11 +40,25 @@ export default {
 <p>4、编写相关技术设计文档与技术规范，参与公司技术管理工作。</p>`,
     };
   },
+  created() {
+    console.log("id", this.$route.params.id);
+  },
+  methods: {
+    goBack() {
+      this.$router.back();
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.codetail {
+.el-page-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+  box-shadow: 0 0 3px #ddd;
+}
+.detail-enterprise {
   padding: 20px;
   .el-carousel__item h3 {
     color: #475669;
@@ -67,6 +82,7 @@ export default {
   .nickname {
     font-size: 18px;
     margin-top: 10px;
+    margin-bottom: 20px;
   }
 
   .templete {

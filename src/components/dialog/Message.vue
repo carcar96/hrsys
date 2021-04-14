@@ -46,7 +46,7 @@
         </el-table-column>
         <el-table-column label="操作" width="150" align="center">
           <template #default="scope">
-            <el-button @click="handleClick(scope.row)" type="text"
+            <el-button @click="handleClick(scope.row, scope.$index)" type="text"
               >查看</el-button
             >
           </template>
@@ -75,6 +75,7 @@ export default {
         {
           date: "2020-12-30",
           type: "2",
+          id: "1",
           title: "元旦放假通知",
           status: "1", //0-未看 1-已看
         },
@@ -83,6 +84,7 @@ export default {
           type: "3",
           title: "给企业推荐工人的三大方法",
           status: "0", //0-未看 1-已看
+          id: "1",
         },
       ],
     };
@@ -108,8 +110,21 @@ export default {
     closed() {
       this.$emit("closed", false);
     },
-    handleClick(row) {
+    handleClick(row, index) {
       console.log(row);
+      switch (row.type) {
+        case "1": // 入职消息
+          this.list[index].status = "1";
+          break;
+        case "2": // 企业动态
+          this.$router.push({ name: "DynamicDetail", params: row });
+          break;
+        case "3": // 分享
+          this.$router.push({ name: "ShareDetail", params: row });
+          break;
+        default:
+          break;
+      }
     },
   },
 };

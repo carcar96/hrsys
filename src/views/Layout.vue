@@ -22,8 +22,8 @@
 
 
 <script>
-import Aslide from "@/components/Aslide.vue";
-import Header from "@/components/Header.vue";
+import Aslide from "@/components/layout/Aslide.vue";
+import Header from "@/components/layout/Header.vue";
 var elementResizeDetectorMaker = require("element-resize-detector");
 
 export default {
