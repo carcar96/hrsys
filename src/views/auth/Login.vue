@@ -103,6 +103,8 @@ export default {
 <style lang="sass" scoped>
 .login
   background-image: url('../../assets/images/bg.jpg')
+  background-size: cover
+  background-color: #f3f3f3
   position: absolute
   top: 0
   left: 0
@@ -112,7 +114,7 @@ export default {
   .form
     border: 1px solid #eee
     padding: 24px 56px
-    background-color: rgba(255,255,255,0.7)
+    background-color: rgba(255,255,255,0.9)
     text-align: center
     border-radius: 5px
     position: absolute

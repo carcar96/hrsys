@@ -1,7 +1,16 @@
 <template>
   <router-view />
 </template>
-
+<script>
+export default {
+  created() {
+    let loading = document.getElementById("loading");
+    if (loading !== null) {
+      document.body.removeChild(loading);
+    }
+  },
+};
+</script>
 
 <style lang="scss">
 * {

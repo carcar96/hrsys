@@ -1,6 +1,6 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 
-const routes = [,
+const routes = [
   {
     path: '/',
     redirect: { name: 'Background' }
@@ -219,10 +219,12 @@ const routes = [,
   },
 ]
 
+// createWebHistory --history 路由
+// createWebHashHistory --hash 路由
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
 router.beforeEach((to, from, next) => {
   // 获取用户身份
@@ -252,6 +254,6 @@ router.beforeEach((to, from, next) => {
       next()
     }
   }
-})
+});
 
 export default router

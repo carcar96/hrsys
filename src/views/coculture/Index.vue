@@ -185,7 +185,7 @@
         :rules="editRule"
         ref="edit-form"
         label-width="auto"
-        size="small"
+        size="medium"
         class="edit-form"
       >
         <el-form-item label="企业定位" prop="location">
@@ -546,5 +546,10 @@ export default {
       width: 400px;
     }
   }
+}
+</style>
+<style>
+.coculture .el-overlay {
+  z-index: 1149 !important;
 }
 </style>

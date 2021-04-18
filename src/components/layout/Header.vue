@@ -4,7 +4,7 @@
       <i
         @click="toggleCollapse"
         class="toggle-collapse"
-        :class="isCollapse ? 'el-icon-d-arrow-right' : 'el-icon-d-arrow-left'"
+        :class="isCollapse ? 'el-icon-upload2' : 'el-icon-download'"
       ></i>
       <div class="breadcrumb-box">
         <i class="el-icon-location-outline"></i>
@@ -104,7 +104,9 @@ export default {
   border-bottom: 1px solid #ccc;
   box-sizing: border-box;
 }
-
+.toggle-collapse {
+  transform: rotate(90deg);
+}
 .toggle-collapse:hover {
   cursor: pointer;
   color: #409eff;

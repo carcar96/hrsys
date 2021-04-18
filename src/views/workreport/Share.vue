@@ -156,7 +156,7 @@
         :rules="shareRules"
         ref="share-form"
         label-width="auto"
-        size="small"
+        size="medium"
         class="share-form"
       >
         <el-form-item label="标题" prop="title">

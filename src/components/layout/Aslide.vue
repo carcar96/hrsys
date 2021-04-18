@@ -248,7 +248,7 @@ export default {
         // });
         setTimeout(() => {
           this.isRefresh = false;
-        }, 5000);
+        }, 3000);
       }
     },
     handleSelect(key, keyPath) {

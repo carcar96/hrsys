@@ -1,94 +1,38 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+// import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
 // 引入全局方法
-import $utils from './assets/js/utils';
-const $moment = require("moment");
-//echarts
-import * as $echarts from 'echarts'
-// element-plus
-import { ElPageHeader, ElAutocomplete, ElTimePicker, ElTree, ElSwitch, ElTabs, ElTabPane, ElRadioGroup, ElRadioButton, ElCard, ElInfiniteScroll, ElRow, ElCol, ElCarousel, ElCarouselItem, ElUpload, ElImage, ElRadio, ElMessage, ElMessageBox, ElDialog, ElDivider, ElSpace, ElAvatar, ElSelect, ElOption, ElPagination, ElFooter, ElDatePicker, ElBadge, ElPopper, ElBreadcrumb, ElBreadcrumbItem, ElButton, ElInput, ElForm, ElFormItem, ElHeader, ElContainer, ElAside, ElMenu, ElSubmenu, ElMenuItemGroup, ElMenuItem, ElDropdown, ElDropdownMenu, ElDropdownItem, ElMain, ElTable, ElTableColumn } from 'element-plus';
-import 'element-plus/packages/theme-chalk/src/base.scss';
-import lang from 'element-plus/lib/locale/lang/zh-cn'
-import 'dayjs/locale/zh-cn'
-import locale from 'element-plus/lib/locale'
-// 设置ele+语言
-locale.use(lang);
-const components = [
-    ElPageHeader,
-    ElAutocomplete,
-    ElTimePicker,
-    ElTree,
-    ElSwitch,
-    ElRadioGroup,
-    ElRadioButton,
-    ElCard,
-    ElDialog,
-    ElDivider,
-    ElSpace,
-    ElAvatar,
-    ElOption,
-    ElSelect,
-    ElButton,
-    ElInput,
-    ElForm,
-    ElFormItem,
-    ElHeader,
-    ElContainer,
-    ElAside,
-    ElMenu,
-    ElSubmenu,
-    ElMenuItemGroup,
-    ElMenuItem,
-    ElDropdown,
-    ElDropdownMenu,
-    ElDropdownItem,
-    ElMain,
-    ElTable,
-    ElTableColumn,
-    ElBreadcrumb,
-    ElBreadcrumbItem,
-    ElPopper,
-    ElBadge,
-    ElDatePicker,
-    ElFooter,
-    ElPagination,
-    ElRadio,
-    ElImage,
-    ElUpload,
-    ElCarousel,
-    ElCarouselItem,
-    ElCol,
-    ElRow,
-    ElTabs, ElTabPane,
-]
-const plugins = [
-    ElInfiniteScroll,
-    ElMessage,
-    ElMessageBox,
-    // ElLoading,
-    // ElNotification,
-]
+import utils from './assets/js/utils';
+// const moment = require("moment");
 
+// // echarts
+// import * as echarts from 'echarts'; // 全部引入
+// // import echarts from './assets/js/echarts'; // 按需引入
 
+// // tinymce 编辑器
+// import tinymce from "tinymce/tinymce";
 
-const app = createApp(App)
+// // element-plus
+// import ElementPlus from 'element-plus';
+// import 'element-plus/lib/theme-chalk/index.css';
+// ele+语言
+import 'dayjs/locale/zh-cn';
+import locale from 'element-plus/lib/locale/lang/zh-cn'
 
-components.forEach(component => {
-    app.component(component.name, component)
-})
-plugins.forEach(plugin => {
-    app.use(plugin)
-})
+// const app = createApp(App);
+const app = Vue.createApp(App);
 
-// 全局挂载
-app.config.globalProperties.$utils = $utils;
-app.config.globalProperties.$moment = $moment;
-app.config.globalProperties.$echarts = $echarts;
-
-// 分环境处理
+// 开启devtools
 if (process.env.NODE_ENV === 'development') {
     app.config.devtools = true;
 }
-app.use(store).use(router).mount('#app')
+
+// 全局挂载
+app.config.globalProperties.$utils = utils;
+app.config.globalProperties.$moment = moment;
+app.config.globalProperties.$echarts = echarts;
+app.config.globalProperties.$tinymce = tinymce;
+
+app.use(ElementPlus, { locale });
+app.use(store).use(router).mount('#app');

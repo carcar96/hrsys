@@ -9,19 +9,19 @@
     </editor>
   </div>
 </template>
+
 <script>
-import tinymce from "tinymce/tinymce";
 import Editor from "@tinymce/tinymce-vue";
-import "tinymce/themes/silver";
-// 编辑器插件plugins
-// 更多插件参考：https://www.tiny.cloud/docs/plugins/
-import "tinymce/plugins/image"; // 插入上传图片插件
-import "tinymce/plugins/media"; // 插入视频插件
-import "tinymce/plugins/table"; // 插入表格插件
-import "tinymce/plugins/lists"; // 列表插件
-import "tinymce/plugins/wordcount"; // 字数统计插件
-import "tinymce/skins/ui/oxide/skin.css";
-import "tinymce/icons/default/icons"; //解决了icons.js 报错Unexpected token '<'
+// import "tinymce/themes/silver";
+// // 编辑器插件plugins
+// // 更多插件参考：https://www.tiny.cloud/docs/plugins/
+// import "tinymce/plugins/image"; // 插入上传图片插件
+// import "tinymce/plugins/media"; // 插入视频插件
+// import "tinymce/plugins/table"; // 插入表格插件
+// import "tinymce/plugins/lists"; // 列表插件
+// import "tinymce/plugins/wordcount"; // 字数统计插件
+// import "tinymce/skins/ui/oxide/skin.css";
+// import "tinymce/icons/default/icons"; //解决了icons.js 报错Unexpected token '<'
 
 export default {
   components: {
@@ -52,13 +52,16 @@ export default {
     },
   },
   data() {
+    const publicPath = process.env.BASE_URL;
     return {
       //初始化配置
       init: {
-        language_url: `/static/tinymce/langs/zh_CN.js`,
+        language_url: `${publicPath}lib/tinymce/langs/zh_CN.js`,
         language: "zh_CN",
-        skin_url: `/static/tinymce/skins/ui/oxide`,
-        content_css: `/static/tinymce/skins/content/default/content.css`,
+        skin_url: `${publicPath}lib/tinymce/skins/ui/oxide`,
+        // skin_url: `https://cdn.jsdelivr.net/npm/tinymce@5.7.1/skins/ui/oxide`,
+        content_css: `${publicPath}lib/tinymce/skins/content/default/content.min.css`,
+        // content_css: `https://cdn.jsdelivr.net/npm/tinymce@5.7.1/skins/content/default/content.min.css`,
         height: 300,
         plugins: this.plugins,
         toolbar: this.toolbar,
@@ -75,7 +78,7 @@ export default {
     };
   },
   mounted() {
-    tinymce.init({});
+    this.$tinymce.init({});
   },
   methods: {
     //添加相关的事件，可用的事件参照文档=> https://github.com/tinymce/tinymce-vue => All available events

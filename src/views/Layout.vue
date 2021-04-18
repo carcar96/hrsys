@@ -3,7 +3,7 @@
     <el-container class="c-container">
       <el-aside
         id="aside"
-        :width="asideMaxWidth + 'px'"
+        :width="asideWidth + 'px'"
         style="overflow-x: hidden"
       >
         <Aslide :isCollapse="isCollapse" />
@@ -29,7 +29,8 @@ var elementResizeDetectorMaker = require("element-resize-detector");
 export default {
   data() {
     return {
-      isCollapse: false,
+      isCollapse: null,
+      asideWidth: 0,
       asideMaxWidth: 240,
       asideMinWidth: 64,
     };
@@ -39,12 +40,28 @@ export default {
     Header,
   },
   watch: {
-    isCollapse() {
-      this.listenAslide();
+    isCollapse(newVal, oldVal) {
+      if (oldVal !== null) {
+        // created周期作出的修改不触发监听
+        this.listenAslide();
+      }
     },
     $route() {
       this.$utils.clearStoreEchart();
     },
+  },
+  created() {
+    this.isCollapse = false;
+    this.asideWidth = this.asideMaxWidth;
+
+    // let collapse = localStorage.getItem("collapse");
+    // if (collapse == "1") {
+    //   this.isCollapse = true;
+    //   this.asideWidth = this.asideMinWidth;
+    // } else {
+    //   this.isCollapse = false;
+    //   this.asideWidth = this.asideMaxWidth;
+    // }
   },
   methods: {
     listenAslide() {
@@ -52,14 +69,16 @@ export default {
       let erd = elementResizeDetectorMaker();
       erd.listenTo(document.getElementById("aslideMenu"), (element) => {
         this.$nextTick(() => {
-          // //使echarts尺寸重置
-          this.$store.state.echartList.forEach((item) => {
-            item.resize();
-          });
+          // 侧边栏
           var width = element.offsetWidth;
           width = width > this.asideMaxWidth ? this.asideMaxWidth : width;
           width = width < this.asideMinWidth ? this.asideMinWidth : width;
           document.getElementById("aside").style.width = width + "px";
+
+          // //使echarts尺寸重置
+          this.$store.state.echartList.forEach((item) => {
+            item.resize();
+          });
         });
       });
       erd.listenTo(document.getElementById("aside"), (element) => {
@@ -78,6 +97,7 @@ export default {
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse;
+      // localStorage.setItem("collapse", this.isCollapse ? 1 : 0);
     },
   },
 };

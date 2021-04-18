@@ -1,6 +1,11 @@
 <template>
   <div id="about" class="about">
-    <el-dialog title="关于" v-model="dialogVisible" @closed="closed">
+    <el-dialog
+      width="600px"
+      title="关于"
+      v-model="dialogVisible"
+      @closed="closed"
+    >
       <div class="content">
         <p align="center" class="ver">
           <span>版本号：</span>
@@ -8,7 +13,7 @@
         </p>
         <p align="center">
           版权所有：© 2021 TEC Solutions Limited. All rights reserved
-          粤ICP备07025309号-3
+          粤ICP备07025309号-3.
         </p>
       </div>
     </el-dialog>
@@ -43,15 +48,15 @@ export default {
   line-height: initial;
 
   .content {
-    line-height: 28px;
-    padding-top: 10px;
-    padding-bottom: 40px;
+    padding-bottom: 36px;
+    font-size: 12px;
 
     .ver {
-      font-size: 16px;
+      font-size: 15px;
+      margin-bottom: 8px;
 
       .num {
-        font-weight: bold;
+        font-weight: 600;
       }
     }
   }
